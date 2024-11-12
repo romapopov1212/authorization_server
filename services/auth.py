@@ -44,13 +44,14 @@ class AuthService:
 
     def __init__(self, session: Session = Depends(get_session)):
         self.session = session
-        
+
     def register(self, user_data: UserRegistration) -> Token:
         user = tables.User(
             email = user_data.email,
             username = user_data.username,
             password_hash = self.hash_password(user_data.password)
         )
+        self.session.add(user)
         self.session.commit()
-        self.session.close()
+
         return self.create_token(user)
