@@ -8,5 +8,7 @@ python-dotenv
 alembic
 python-jose
 passlib[bcrypt]
+argon2-cffi
+argon2
 python-multipart
 starlette

@@ -2,7 +2,7 @@ from pydantic import BaseSettings
 
 
 class Settings(BaseSettings):
-    database_url = 'postgresql://postgres:1234@localhost:5432/Users'
+    database_url: str
     jwt_secret: str
     jwt_algorithm: str = 'HS256'
     jwt_expiration = 3600

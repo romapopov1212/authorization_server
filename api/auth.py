@@ -9,6 +9,6 @@ router = APIRouter(
     prefix='/auth'
 )
 
-@router.post('/sign-un', response_model=Token)
-def sign_in(user_data : UserRegistration, service : AuthService = Depends()):
+@router.post('/sign-up', response_model=Token)
+def sign_up(user_data : UserRegistration, service : AuthService = Depends()):
     return service.register(user_data)
