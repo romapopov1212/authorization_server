@@ -4,6 +4,7 @@ from fastapi import Depends
 from fastapi.security import OAuth2PasswordBearer
 from jose import jwt
 from argon2 import PasswordHasher
+from argon2.exceptions import VerifyMismatchError
 from sqlalchemy.orm import Session
 from fastapi import HTTPException
 from fastapi import status
@@ -20,12 +21,12 @@ ph = PasswordHasher()
 
 class AuthService:
 
-    @classmethod
-    def hash_password(cls, password: str) -> str:
+    @staticmethod
+    def hash_password(password: str) -> str:
         return ph.hash(password)
 
-    @classmethod
-    def create_token(cls, user: tables.User) -> Token:
+    @staticmethod
+    def create_token(user: tables.User) -> Token:
         user_data = User.from_orm(user)
         now = datetime.utcnow()
 
@@ -71,4 +72,24 @@ class AuthService:
         )
         self.session.add(user)
         self.session.commit()
+        # return self.create_token(user)
+
+    @staticmethod
+    def verify_passwords(plain_password, hashed_password):
+        try:
+            ph.verify(hashed_password, plain_password)
+            return True
+        except VerifyMismatchError:
+            return False
+
+    def authenticate_user(self, email: str, password: str) -> Token:
+        user = self.session.query(tables.User).filter(tables.User.email == email).first()
+        if not user or not self.verify_passwords(password, user.password_hash):
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Incorrect email or password",
+                headers={
+                    'WWW-Authenticate': 'Bearer'
+                },
+            )
         return self.create_token(user)

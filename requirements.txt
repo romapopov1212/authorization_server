@@ -13,3 +13,4 @@ argon2
 python-multipart
 starlette
 pyotp
+pyjwt
