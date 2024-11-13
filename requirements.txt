@@ -12,3 +12,4 @@ argon2-cffi
 argon2
 python-multipart
 starlette
+pyotp

@@ -1,6 +1,5 @@
 from fastapi import APIRouter
 from fastapi import Depends
-from fastapi.security import OAuth2PasswordRequestForm
 
 from models.auth import Token, UserRegistration
 from services.auth import AuthService
