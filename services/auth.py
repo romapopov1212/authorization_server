@@ -2,12 +2,13 @@ from datetime import datetime, timedelta
 
 from fastapi import Depends
 from fastapi.security import OAuth2PasswordBearer
-from jose import jwt
+from jose import jwt, JWTError
 from argon2 import PasswordHasher
 from argon2.exceptions import VerifyMismatchError
 from sqlalchemy.orm import Session
 from fastapi import HTTPException
 from fastapi import status
+from fastapi.responses import JSONResponse
 from sqlalchemy import or_
 
 from database import get_session
@@ -48,7 +49,7 @@ class AuthService:
     def __init__(self, session: Session = Depends(get_session)):
         self.session = session
 
-    def register(self, user_data: UserRegistration) -> Token:
+    def register(self, user_data: UserRegistration):
         existing_user = self.session.query(tables.User).filter(
             or_(
                 tables.User.email == user_data.email,
@@ -72,7 +73,10 @@ class AuthService:
         )
         self.session.add(user)
         self.session.commit()
-        # return self.create_token(user)
+        return JSONResponse(
+            status_code=status.HTTP_201_CREATED,
+            content={"message": "User registered successfully", "user": user_data.dict()}
+        )
 
     @staticmethod
     def verify_passwords(plain_password, hashed_password):
