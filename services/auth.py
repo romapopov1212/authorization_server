@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+from socket import send_fds
 
 from fastapi import Depends
 from fastapi.security import OAuth2PasswordBearer
@@ -13,8 +14,9 @@ from sqlalchemy import or_
 
 from database import get_session
 from db import tables
-from models.auth import Token, User, UserRegistration
+from models.auth import Token, User, UserRegistration, RefToken
 from settings import settings
+from services.token import TokenService
 
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl='auth/sign-in')
@@ -26,29 +28,19 @@ class AuthService:
     def hash_password(password: str) -> str:
         return ph.hash(password)
 
+
+
     @staticmethod
-    def create_token(user: tables.User) -> Token:
-        user_data = User.from_orm(user)
-        now = datetime.utcnow()
+    def verify_passwords(plain_password, hashed_password):
+        try:
+            ph.verify(hashed_password, plain_password)
+            return True
+        except VerifyMismatchError:
+            return False
 
-        payload = {
-            'iat' : now,
-            'nbf' : now,
-            'exp' : now + timedelta(seconds=settings.jwt_expiration),
-            'sub' : str(user_data.id),
-            'user' : user_data.dict()
-        }
-
-        token = jwt.encode(
-            payload,
-            settings.jwt_secret,
-            algorithm=settings.jwt_algorithm,
-        )
-        return Token(access_token=token)
-
-    def __init__(self, session: Session = Depends(get_session)):
+    def __init__(self, session: Session = Depends(get_session), token_service: TokenService=Depends()):
         self.session = session
-
+        self.token_service = token_service
     def register(self, user_data: UserRegistration):
         existing_user = self.session.query(tables.User).filter(
             or_(
@@ -78,14 +70,6 @@ class AuthService:
             content={"message": "User registered successfully", "user": user_data.dict()}
         )
 
-    @staticmethod
-    def verify_passwords(plain_password, hashed_password):
-        try:
-            ph.verify(hashed_password, plain_password)
-            return True
-        except VerifyMismatchError:
-            return False
-
     def authenticate_user(self, email: str, password: str) -> Token:
         user = self.session.query(tables.User).filter(tables.User.email == email).first()
         if not user or not self.verify_passwords(password, user.password_hash):
@@ -96,7 +80,11 @@ class AuthService:
                     'WWW-Authenticate': 'Bearer'
                 },
             )
-        return self.create_token(user)
+        access_token = self.token_service.create_access_token(user)
+        refresh_token = self.token_service.create_refresh_token(user)
+        return RefToken(access_token=access_token, refresh_token=refresh_token)
+
+
 
 def get_current_user(token: str = Depends(oauth2_scheme)):
     try:

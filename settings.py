@@ -6,6 +6,7 @@ class Settings(BaseSettings):
     jwt_secret: str
     jwt_algorithm: str = 'HS256'
     jwt_expiration: int = 3600
+    refresh_token_expire: int = 8640 *7 # неделя
 
     class Config:
         env_file = '.env'

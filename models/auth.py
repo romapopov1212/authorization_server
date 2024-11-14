@@ -20,6 +20,10 @@ class Token(BaseModel):
     access_token: str
     type_token: str = 'bearer'
 
+class RefToken(Token):
+    refresh_token: str
+
+
 class UserLogin(BaseModel):
     email: EmailStr
     password: str
