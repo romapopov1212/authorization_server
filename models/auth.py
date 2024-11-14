@@ -1,6 +1,7 @@
 from typing import Optional
 
-from pydantic import BaseModel, EmailStr
+from pydantic import EmailStr, BaseModel
+
 
 class BaseUser(BaseModel):
     email: EmailStr
@@ -13,7 +14,7 @@ class User(BaseUser):
     id: Optional[int] = None
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class Token(BaseModel):
     access_token: str

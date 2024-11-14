@@ -1,7 +1,7 @@
 fastapi
 uvicorn
 postgres
-pydantic==1.10.11
+pydantic
 sqlalchemy
 psycopg2
 python-dotenv
@@ -15,3 +15,4 @@ starlette
 pyotp
 pyjwt
 pydantic[email]
+pydantic-settings
