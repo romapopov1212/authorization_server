@@ -16,3 +16,6 @@ pyotp
 pyjwt
 pydantic[email]
 pydantic-settings
+
+passlib
+jwt
