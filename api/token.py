@@ -1,10 +1,8 @@
 from fastapi import APIRouter
 from fastapi import Depends
 
-from sqlalchemy.orm import Session
 
 from services.token import TokenService
-from database import get_session
 from models.auth import Token
 
 router = APIRouter(
