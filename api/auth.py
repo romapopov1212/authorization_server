@@ -5,7 +5,7 @@ from fastapi import APIRouter
 from fastapi import Depends
 from models.auth import Token
 
-from models.auth import UserRegistration, UserLogin, RefToken
+from models.auth import UserRegistration
 from services.auth import AuthService
 
 router = APIRouter(

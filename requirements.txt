@@ -13,7 +13,7 @@ argon2
 python-multipart
 starlette
 pyotp
-pyjwt==1.7.1
+pyjwt
 pydantic[email]
 pydantic-settings
 jwt

@@ -71,7 +71,7 @@ class AuthService:
             )
         access_token_expires = timedelta(minutes=settings.jwt_expiration)
         access_token = self.create_access_token(
-            data={"sub": user.username}, expires_delta=access_token_expires
+            data={"sub": str(user.id)}, expires_delta=access_token_expires
         )
         return Token(access_token=access_token, token_type="bearer")
 
@@ -85,7 +85,8 @@ class AuthService:
         except VerifyMismatchError:
             return False
 
-    def get_current_user(self,token: Annotated[str, Depends(oauth2_scheme)]):
+    @staticmethod
+    def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
         credentials_exception = HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Could not validate credentials",
