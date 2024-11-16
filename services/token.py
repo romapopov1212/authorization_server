@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+from typing import Annotated
 
 from fastapi import Depends
 from jose import jwt, JWTError
@@ -6,11 +7,16 @@ from jwt import ExpiredSignatureError
 from sqlalchemy.orm import Session
 from fastapi import HTTPException
 from fastapi import status
+from jwt.exceptions import InvalidTokenError
+from fastapi.security import OAuth2PasswordBearer
 
 from database import get_session
 from db import tables
 from models.auth import User, Token
 from settings import settings
+
+
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl='auth/sign-in')
 
 class TokenService:
 
@@ -35,25 +41,21 @@ class TokenService:
         )
         return refresh_token
 
-
-    def create_access_token(self, user: tables.User) -> str:
-        user_data = User.from_orm(user)
-        now = datetime.utcnow()
-
-        payload = {
-            'iat' : now,
-            'nbf' : now,
-            'exp' : now + timedelta(seconds=settings.jwt_expiration),
-            'sub' : str(user_data.id),
-            'user' : user_data.dict()
-        }
-
-        access_token = jwt.encode(
-            payload,
-            settings.jwt_secret,
-            algorithm=settings.jwt_algorithm,
+    @staticmethod
+    def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
+        credentials_exception = HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Could not validate credentials",
+            headers={"WWW-Authenticate": "Bearer"},
         )
-        return access_token
+        try:
+            payload = jwt.decode(token, settings.jwt_secret, algorithms=settings.jwt_algorithm)
+            user_id: str = payload.get("sub")
+            if user_id is None:
+                raise credentials_exception
+        except InvalidTokenError:
+            raise credentials_exception
+        return user_id
 
     def refresh_token(self, refresh_token: str):
         try:

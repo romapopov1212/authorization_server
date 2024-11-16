@@ -1,9 +1,7 @@
 from datetime import datetime, timedelta, timezone
-from typing import Annotated
 
 from fastapi import Depends
-from fastapi.security import OAuth2PasswordBearer
-from jose import jwt, JWTError
+from jose import jwt
 from argon2 import PasswordHasher
 from argon2.exceptions import VerifyMismatchError
 from sqlalchemy.orm import Session
@@ -11,7 +9,7 @@ from fastapi import HTTPException
 from fastapi import status
 from fastapi.responses import JSONResponse
 from sqlalchemy import or_
-from jwt.exceptions import InvalidTokenError
+
 
 
 from database import get_session
@@ -20,11 +18,9 @@ from models.auth import Token, UserRegistration
 from settings import settings
 from services.token import TokenService
 
-
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl='auth/sign-in')
 ph = PasswordHasher()
 
-class AuthService:
+class ProfileService:
 
     def __init__(self, session: Session = Depends(get_session), token_service: TokenService=Depends()):
         self.session = session
@@ -84,22 +80,6 @@ class AuthService:
             return True
         except VerifyMismatchError:
             return False
-
-    @staticmethod
-    def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
-        credentials_exception = HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Could not validate credentials",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
-        try:
-            payload = jwt.decode(token, settings.jwt_secret, algorithms=settings.jwt_algorithm)
-            user_id: str = payload.get("sub")
-            if user_id is None:
-                raise credentials_exception
-        except InvalidTokenError:
-            raise credentials_exception
-        return user_id
 
     def create_access_token(self, data: dict, expires_delta: timedelta | None = None):
         to_encode = data.copy()

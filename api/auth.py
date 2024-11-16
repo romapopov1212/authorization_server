@@ -6,20 +6,20 @@ from fastapi import Depends
 from models.auth import Token
 
 from models.auth import UserRegistration
-from services.auth import AuthService
+from services.auth import ProfileService
 
 router = APIRouter(
     prefix='/auth'
 )
 
 @router.post('/sign-up')
-def sign_up(user_data : UserRegistration, service : AuthService = Depends()):
+def sign_up(user_data : UserRegistration, service : ProfileService = Depends()):
     return service.register(user_data)
 
 
 @router.post('/sign-in', response_model=Token)
 def sign_in(
-    form_data: Annotated[OAuth2PasswordRequestForm, Depends()], service: AuthService = Depends()
+    form_data: Annotated[OAuth2PasswordRequestForm, Depends()], service: ProfileService = Depends()
 ) -> Token:
     return service.authenticate_user(form_data.username, form_data.password)
 
