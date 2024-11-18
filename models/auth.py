@@ -18,7 +18,7 @@ class User(BaseUser):
 
 class Token(BaseModel):
     access_token: str
-
+    refresh_token: str
     type_token: str = 'bearer'
 
 

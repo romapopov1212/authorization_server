@@ -77,7 +77,7 @@ class AuthService:
                     expires_delta=timedelta(days=settings.refresh_token_expire),
                     #refresh = True,
                 )
-                return Token(access_token=access_token)
+                return Token(access_token=access_token, refresh_token=refresh_token)
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Incorrect username or password",
