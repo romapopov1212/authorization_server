@@ -11,18 +11,17 @@ from fastapi.responses import JSONResponse
 from sqlalchemy import or_
 
 
-
 from database import get_session
 from db import tables
 from models.auth import Token, UserRegistration
 from settings import settings
-from services.token import TokenService
+from services.token import TokenService as TS
 
 ph = PasswordHasher()
 
 class ProfileService:
 
-    def __init__(self, session: Session = Depends(get_session), token_service: TokenService=Depends()):
+    def __init__(self, session: Session = Depends(get_session), token_service: TS=Depends()):
         self.session = session
         self.token_service = token_service
 
@@ -66,7 +65,7 @@ class ProfileService:
                 },
             )
         access_token_expires = timedelta(minutes=settings.jwt_expiration)
-        access_token = self.create_access_token(
+        access_token = self.token_service.create_access_token(
             data={"sub": str(user.id)}, expires_delta=access_token_expires
         )
         return Token(access_token=access_token, token_type="bearer")
@@ -81,12 +80,3 @@ class ProfileService:
         except VerifyMismatchError:
             return False
 
-    def create_access_token(self, data: dict, expires_delta: timedelta | None = None):
-        to_encode = data.copy()
-        if expires_delta:
-            expire = datetime.now(timezone.utc) + expires_delta
-        else:
-            expire = datetime.now(timezone.utc) + timedelta(minutes=15)
-        to_encode.update({"exp": expire})
-        encoded_jwt = jwt.encode(to_encode, settings.jwt_secret, algorithm=settings.jwt_algorithm)
-        return encoded_jwt

@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 from typing import Annotated
+from datetime import datetime, timedelta, timezone
 
 from fastapi import Depends
 from jose import jwt, JWTError
@@ -68,9 +69,23 @@ class TokenService:
             if user is None:
                 raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='User not found.')
 
-            new_access_token = self.create_access_token(user)
+            #new_access_token = self.create_access_token(user)
+            access_token_expires = timedelta(minutes=settings.jwt_expiration)
+            new_access_token = self.create_access_token(
+                data={"sub": str(user.id)}, expires_delta=access_token_expires
+            )
             return Token(access_token=new_access_token)
         except ExpiredSignatureError:
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail='Expired token.')
         except JWTError:
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail='Invalid token.')
+
+    def create_access_token(self, data: dict, expires_delta: timedelta | None = None):
+        to_encode = data.copy()
+        if expires_delta:
+            expire = datetime.now(timezone.utc) + expires_delta
+        else:
+            expire = datetime.now(timezone.utc) + timedelta(minutes=15)
+        to_encode.update({"exp": expire})
+        encoded_jwt = jwt.encode(to_encode, settings.jwt_secret, algorithm=settings.jwt_algorithm)
+        return encoded_jwt
