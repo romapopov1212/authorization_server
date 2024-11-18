@@ -16,4 +16,4 @@ pyotp
 pyjwt
 pydantic[email]
 pydantic-settings
-jwt
+

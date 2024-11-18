@@ -2,8 +2,9 @@ from datetime import datetime, timedelta
 from typing import Annotated
 from datetime import datetime, timedelta, timezone
 
+import jwt
+import logging
 from fastapi import Depends
-from jose import jwt, JWTError
 from jwt import ExpiredSignatureError
 from sqlalchemy.orm import Session
 from fastapi import HTTPException
@@ -13,8 +14,8 @@ from fastapi.security import OAuth2PasswordBearer
 
 from database import get_session
 from settings import settings
-import jwt
-import logging
+
+
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl='auth/sign-in')
 
@@ -46,14 +47,24 @@ class TokenService:
 
         return user_id
 
-    def create_access_token(self, data: dict, expires_delta: timedelta | None = None, refresh: bool = False):
-        payload = {}
-        payload['sub'] = data
-        payload['exp'] = datetime.now() + (expires_delta if expires_delta is not None else timedelta(seconds=settings.jwt_expiration))
-        payload['refresh'] = refresh
+    # def create_access_token(self, data: dict, expires_delta: timedelta | None = None, refresh: bool = False):
+    #     payload = {}
+    #     payload['sub'] = data
+    #     payload['exp'] = datetime.now() + (expires_delta if expires_delta is not None else timedelta(seconds=settings.jwt_expiration))
+    #     payload['refresh'] = refresh
+    #
+    #     token = jwt.encode(payload, key=settings.jwt_secret, algorithm=settings.jwt_algorithm)
+    #     return token
 
-        token = jwt.encode(payload, key=settings.jwt_secret, algorithm=settings.jwt_algorithm)
-        return token
+    def create_access_token(self, data: dict, expires_delta: timedelta | None = None):
+        to_encode = data.copy()
+        if expires_delta:
+            expire = datetime.now(timezone.utc) + expires_delta
+        else:
+            expire = datetime.now(timezone.utc) + timedelta(minutes=15)
+        to_encode.update({"exp": expire})
+        encoded_jwt = jwt.encode(to_encode, settings.jwt_secret, algorithm=settings.jwt_algorithm)
+        return encoded_jwt
 
     def decode_token(self, token:str) ->dict:
         try:
@@ -62,3 +73,19 @@ class TokenService:
         except jwt.PyJWTError as e:
             logging.exception(e)
             return None
+
+# class AccessTokenBearer(TokenService):
+#     def verify_token(self, token_data: dict) -> None:
+#         if token_data and token_data['refresh']:
+#             raise HTTPException(
+#                 status_code=status.HTTP_403_FORBIDDEN,
+#                 detail="Please provide an access token",
+#             )
+#
+# class RefreshTokenBearer(TokenService):
+#     def verify_token(self, token_data: dict) -> None:
+#         if token_data and not token_data['refresh']:
+#             raise HTTPException(
+#                 status_code=status.HTTP_403_FORBIDDEN,
+#                 detail="Please provide a refresh token",
+#            )
