@@ -1,0 +1,11 @@
+2024-11-18 23:14:23.885 | ERROR    | services.auth:register:38 - User with this email: "{user_data.email}" or username: "{user_data.username}" already exists
+2024-11-18 23:15:22.366 | ERROR    | services.auth:register:38 - User with this email: {user_data.email} or username: {user_data.username} already exists
+2024-11-18 23:20:09.810 | INFO     | services.auth:authenticate_user:84 - Successful login attempt for user kolyan228@kolyan228.com
+2024-11-18 23:20:20.183 | WARNING  | services.auth:authenticate_user:64 - Unsuccessful login attempt for user 8
+2024-11-18 23:20:25.720 | INFO     | services.auth:authenticate_user:84 - Successful login attempt for user kolyan228@kolyan228.com
+2024-11-18 23:45:50.453 | INFO     | services.auth:authenticate_user:84 - Successful login attempt for user kolyan228@kolyan228.com
+2024-11-18 23:52:26.880 | INFO     | services.auth:authenticate_user:84 - Successful login attempt for user kolyan228@kolyan228.com
+2024-11-18 23:58:09.776 | ERROR    | services.profile:change_email:27 - Unsuccessful attempt to change email by user with user id: {user_id}. User with this email: {data.new_email} already exists
+2024-11-18 23:58:23.168 | ERROR    | services.profile:change_username:53 - Unsuccessful attempt to change username by user with user id: {user_id}. User with this username: {data.new_username} already exists
+2024-11-18 23:58:30.895 | ERROR    | services.profile:change_username:53 - Unsuccessful attempt to change username by user with user id: {user_id}. User with this username: {data.new_username} already exists
+2024-11-18 23:59:36.936 | ERROR    | services.profile:change_username:53 - Unsuccessful attempt to change username by user with user id: {user_id}. User with this username: {data.new_username} already exists

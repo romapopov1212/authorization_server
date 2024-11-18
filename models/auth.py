@@ -1,8 +1,18 @@
 from typing import Optional
 
+from fastapi import Form
 from pydantic import EmailStr, BaseModel
 
 
+class OAuth2EmailPasswordRequestForm:
+    def __init__(
+        self,
+        email: str = Form(...),
+        password: str = Form(...),
+    ):
+        self.email = email
+        self.password = password
+        
 class BaseUser(BaseModel):
     email: EmailStr
     username: str

@@ -21,10 +21,10 @@ class ProfileService:
         return {"username": user.username, "email": user.email}
 
     def change_email(self, user_id, data):
-        existing_user = self.session.query(tables.User).filter(tables.User.email == data).first()
+        existing_user = self.session.query(tables.User).filter(tables.User.email == data.new_email).first()
 
         if existing_user:
-            logger.error("Unsuccessful attempt to change email by user with user id: {user_id}. User with this email: {data} already exists")
+            logger.error("Unsuccessful attempt to change email by user with user id: {user_id}. User with this email: {data.new_email} already exists")
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="User with this email already exists",
@@ -47,10 +47,10 @@ class ProfileService:
         return
 
     def change_username(self, user_id, data):
-        existing_user = self.session.query(tables.User).filter(tables.User.email == data).first()
+        existing_user = self.session.query(tables.User).filter(tables.User.username == data.new_username).first()
 
         if existing_user:
-            logger.error("Unsuccessful attempt to change username by user with user id: {user_id}. User with this username: {data} already exists")
+            logger.error("Unsuccessful attempt to change username by user with user id: {user_id}. User with this username: {data.new_username} already exists")
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="User with this username already exists",

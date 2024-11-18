@@ -35,7 +35,7 @@ class AuthService:
         ).first()
 
         if existing_user:
-            logger.error("User with this email: \"{user_data.email}\" or username: \"{user_data.username}\" already exists")
+            logger.error("User with this email: {user_data.email} or username: {user_data.username} already exists")
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="User with this email or username already exists",
@@ -51,17 +51,17 @@ class AuthService:
         )
         self.session.add(user)
         self.session.commit()
-        logger.info(f"User with email: \"{user_data.user_email}\" and username \"{user_data.username}\" registered successfully")
+        logger.info(f"User with email: \"{user_data.email}\" and username \"{user_data.username}\" registered successfully")
         return JSONResponse(
             status_code=status.HTTP_201_CREATED,
             content={"message": "User registered successfully", "user": user_data.dict()}
         )
 
-    def authenticate_user(self, username: str, password: str) -> Token:
-        user = self.session.query(tables.User).filter(tables.User.username == username).first()
+    def authenticate_user(self, user_email: str, password: str) -> Token:
+        user = self.session.query(tables.User).filter(tables.User.email == user_email).first()
         access_token_expires = timedelta(seconds=settings.jwt_expiration)
         if not user or not self.verify_passwords(password, user.password_hash):
-            logger.warning(f"Unsuccessful login attempt for user {username}")
+            logger.warning(f"Unsuccessful login attempt for user {user.id}")
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="Incorrect email or password",
@@ -81,9 +81,9 @@ class AuthService:
                     expires_delta=timedelta(days=settings.refresh_token_expire),
                     #refresh = True,
                 )
-                logger.info(f"Successful login attempt for user {user.user_email}")
+                logger.info(f"Successful login attempt for user {user.email}")
                 return Token(access_token=access_token, refresh_token=refresh_token)
-        logger.warning(f"Unsuccessful login attempt for user {username}")
+        logger.warning(f"Unsuccessful login attempt for user {user.id}")
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Incorrect username or password",

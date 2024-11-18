@@ -4,20 +4,16 @@ from datetime import datetime, timedelta, timezone
 
 import jwt
 import logging
-from fastapi import Depends
 from jwt import ExpiredSignatureError
 from sqlalchemy.orm import Session
-from fastapi import HTTPException
-from fastapi import status
+from fastapi import HTTPException, Security, Depends, status
 from jwt.exceptions import InvalidTokenError
-from fastapi.security import OAuth2PasswordBearer
+from fastapi.security import HTTPBearer
 
 from database import get_session
 from settings import settings
 
-
-
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl='auth/sign-in')
+http_bearer = HTTPBearer(auto_error=False)
 
 class TokenService:
 
@@ -25,26 +21,32 @@ class TokenService:
         self.session = session
 
     @staticmethod
-    def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
-        credentials_exception = HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Could not validate credentials",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
+    def get_current_user(credentials=Depends(http_bearer)):
+        if not credentials:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Not authenticated",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
+        token = credentials.credentials
         try:
-            payload = jwt.decode(token, settings.jwt_secret, algorithms=settings.jwt_algorithm)
+            payload = jwt.decode(token, key=settings.jwt_secret, algorithms=settings.jwt_algorithm)
             user_id: str = payload.get("sub")
             if user_id is None:
-                raise credentials_exception
-        except ExpiredSignatureError:
+                raise HTTPException(
+                    status_code=status.HTTP_401_UNAUTHORIZED,
+                    detail="Invalid token",
+                )
+        except jwt.ExpiredSignatureError:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="Token has expired",
-                headers={"WWW-Authenticate": "Bearer"},
             )
-        except InvalidTokenError:
-            raise credentials_exception
-
+        except jwt.PyJWTError:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Invalid token",
+            )
         return user_id
 
     # def create_access_token(self, data: dict, expires_delta: timedelta | None = None, refresh: bool = False):

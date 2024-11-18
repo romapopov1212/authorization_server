@@ -11,6 +11,8 @@ from models.auth import Token, PasswordResetConfirmModel
 from models.auth import UserRegistration
 from services.auth import AuthService
 from models.auth import PasswordResetRequestModel
+from models.auth import OAuth2EmailPasswordRequestForm
+
 router = APIRouter(
     prefix='/auth'
 )
@@ -25,10 +27,10 @@ def sign_up(
 
 @router.post('/sign-in', response_model=Token)
 def sign_in(
-        form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
+        form_data: Annotated[OAuth2EmailPasswordRequestForm, Depends()],
         service: AuthService = Depends(),
 ) -> Token:
-    return service.authenticate_user(form_data.username, form_data.password)
+    return service.authenticate_user(form_data.email, form_data.password)
 
 ###############тоже пока в процессе
 # @router.post('/password-reset-request')
