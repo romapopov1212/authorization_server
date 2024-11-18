@@ -1,7 +1,6 @@
 from datetime import datetime, timedelta, timezone
 
 from fastapi import Depends
-from jose import jwt
 from argon2 import PasswordHasher
 from argon2.exceptions import VerifyMismatchError
 from sqlalchemy.orm import Session
@@ -56,6 +55,7 @@ class ProfileService:
 
     def authenticate_user(self, username: str, password: str) -> Token:
         user = self.session.query(tables.User).filter(tables.User.username == username).first()
+        access_token_expires = timedelta(minutes=settings.jwt_expiration)
         if not user or not self.verify_passwords(password, user.password_hash):
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
@@ -64,11 +64,25 @@ class ProfileService:
                     'WWW-Authenticate': 'Bearer'
                 },
             )
-        access_token_expires = timedelta(minutes=settings.jwt_expiration)
-        access_token = self.token_service.create_access_token(
-            data={"sub": str(user.id)}, expires_delta=access_token_expires
+        if user is not None:
+            password_valid = self.verify_passwords(password, user.password_hash)
+            if password_valid:
+                access_token = self.token_service.create_access_token(
+                    data={"sub": str(user.id)},
+                    expires_delta=access_token_expires
+                )
+                refresh_token = self.token_service.create_access_token(
+                    data={"sub": str(user.id)},
+                    expires_delta=timedelta(days=settings.refresh_token_expire),
+                    refresh = True,
+                )
+                return Token(access_token=access_token, refresh_token=refresh_token)
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Incorrect username or password",
         )
-        return Token(access_token=access_token, token_type="bearer")
+
+
 
     def hash_password(self, password: str) -> str:
         return ph.hash(password)

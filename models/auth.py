@@ -18,12 +18,18 @@ class User(BaseUser):
 
 class Token(BaseModel):
     access_token: str
-    type_token: str = 'bearer'
-
-class RefToken(Token):
     refresh_token: str
+    type_token: str = 'bearer'
 
 
 class UserLogin(BaseModel):
     email: EmailStr
     password: str
+
+class PasswordResetRequestModel(BaseModel):
+    email: str
+
+
+class PasswordResetConfirmModel(BaseModel):
+    new_password: str
+    confirm_new_password: str
