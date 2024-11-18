@@ -54,8 +54,15 @@ class TokenService:
             user_id: str = payload.get("sub")
             if user_id is None:
                 raise credentials_exception
+        except ExpiredSignatureError:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Token has expired",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
         except InvalidTokenError:
             raise credentials_exception
+
         return user_id
 
     def refresh_token(self, refresh_token: str):
@@ -69,7 +76,6 @@ class TokenService:
             if user is None:
                 raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='User not found.')
 
-            #new_access_token = self.create_access_token(user)
             access_token_expires = timedelta(minutes=settings.jwt_expiration)
             new_access_token = self.create_access_token(
                 data={"sub": str(user.id)}, expires_delta=access_token_expires
