@@ -1,10 +1,10 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr
 
 class ToChangeData(BaseModel):
     password: str
 
 class ToChangeEmail(ToChangeData):
-    new_email: str
+    new_email: EmailStr
 
 class ToChangeUsername(BaseModel):
     new_username: str

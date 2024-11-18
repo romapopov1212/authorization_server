@@ -6,6 +6,7 @@ from services.auth import ph
 
 from database import get_session
 from db import tables
+from logger import logger
 
 class ProfileService:
 
@@ -20,6 +21,18 @@ class ProfileService:
         return {"username": user.username, "email": user.email}
 
     def change_email(self, user_id, data):
+        existing_user = self.session.query(tables.User).filter(tables.User.email == data).first()
+
+        if existing_user:
+            logger.error("Unsuccessful attempt to change email by user with user id: {user_id}. User with this email: {data} already exists")
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="User with this email already exists",
+                headers={
+                    'WWW-Authenticate': 'Bearer'
+                },
+            )
+
         user = self.session.query(tables.User).filter_by(id=user_id).first()
         if not self.verify_passwords(data.password, user.password_hash):
             raise HTTPException(
@@ -34,6 +47,19 @@ class ProfileService:
         return
 
     def change_username(self, user_id, data):
+        existing_user = self.session.query(tables.User).filter(tables.User.email == data).first()
+
+        if existing_user:
+            logger.error("Unsuccessful attempt to change username by user with user id: {user_id}. User with this username: {data} already exists")
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="User with this username already exists",
+                headers={
+                    'WWW-Authenticate': 'Bearer'
+                },
+            )
+
+        
         user = self.session.query(tables.User).filter_by(id=user_id).first()
         user.username = data.new_username
         self.session.commit()
@@ -42,6 +68,7 @@ class ProfileService:
     def change_password(self, user_id, data):
         user = self.session.query(tables.User).filter_by(id=user_id).first()
         if not self.verify_passwords(data.password, user.password_hash):
+            logger.warning("Unsuccessful attempt to change password by user with user id: {user_id}. Incorrect password")
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="Incorrect password",

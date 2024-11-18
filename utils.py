@@ -1,47 +1,47 @@
 ###потом куда нибудь перенесу, тут это лежить временно
-import logging
+# import logging
 
-from sqlmodel import select
-from itsdangerous import URLSafeTimedSerializer
-from sqlmodel.ext.asyncio.session import AsyncSession
-
-
-from models.auth import User
-from settings import settings
-
-serializer = URLSafeTimedSerializer(
-    secret_key=settings.jwt_secret, salt="email-configuration"
-)
-
-def create_url_safe_token(data: dict):
-
-    token = serializer.dumps(data)
-
-    return token
+# from sqlmodel import select
+# from itsdangerous import URLSafeTimedSerializer
+# from sqlmodel.ext.asyncio.session import AsyncSession
 
 
-def decode_url_safe_token(token: str):
-    try:
-        token_data = serializer.loads(token)
+# from models.auth import User
+# from settings import settings
 
-        return token_data
+# serializer = URLSafeTimedSerializer(
+#     secret_key=settings.jwt_secret, salt="email-configuration"
+# )
 
-    except Exception as e:
-        logging.error(str(e))
+# def create_url_safe_token(data: dict):
 
-def get_user_by_email(self, email: str, session: AsyncSession):
-    statement = select(User).where(User.email == email)
+#     token = serializer.dumps(data)
 
-    result = session.exec(statement)
+#     return token
 
-    user = result.first()
 
-    return user
+# def decode_url_safe_token(token: str):
+#     try:
+#         token_data = serializer.loads(token)
 
-def update_user(self, user: User, user_data: dict, session: AsyncSession):
-    for k, v in user_data.items():
-        setattr(user, k, v)
+#         return token_data
 
-    session.commit()
+#     except Exception as e:
+#         logging.error(str(e))
 
-    return user
+# def get_user_by_email(self, email: str, session: AsyncSession):
+#     statement = select(User).where(User.email == email)
+
+#     result = session.exec(statement)
+
+#     user = result.first()
+
+#     return user
+
+# def update_user(self, user: User, user_data: dict, session: AsyncSession):
+#     for k, v in user_data.items():
+#         setattr(user, k, v)
+
+#     session.commit()
+
+#     return user

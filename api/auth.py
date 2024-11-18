@@ -7,7 +7,7 @@ from starlette.responses import JSONResponse
 
 from models.auth import Token, PasswordResetConfirmModel
 
-from utils import create_url_safe_token
+# from utils import create_url_safe_token
 from models.auth import UserRegistration
 from services.auth import AuthService
 from models.auth import PasswordResetRequestModel
@@ -31,29 +31,29 @@ def sign_in(
     return service.authenticate_user(form_data.username, form_data.password)
 
 ###############тоже пока в процессе
-@router.post('/password-reset-request')
-def password_reset_request(
-        email_data:PasswordResetRequestModel,
-        service: AuthService = Depends(),
-):
-    email = email_data.email
-    token = create_url_safe_token({"email": email})
-    link = f"http://localhost/auth/reset-password?token={token}"
-    html_message = f'<p>{link}</p>'
-    subject = "Reset Your Password"
+# @router.post('/password-reset-request')
+# def password_reset_request(
+#         email_data:PasswordResetRequestModel,
+#         service: AuthService = Depends(),
+# ):
+#     email = email_data.email
+#     token = create_url_safe_token({"email": email})
+#     link = f"http://localhost/auth/reset-password?token={token}"
+#     html_message = f'<p>{link}</p>'
+#     subject = "Reset Your Password"
 
-    return JSONResponse(
-        content = {
-            "message": "На вашу почту отправлена инструкция для смены пароля",
-        },
-        status_code = status.HTTP_200_OK,
-    )
+#     return JSONResponse(
+#         content = {
+#             "message": "На вашу почту отправлена инструкция для смены пароля",
+#         },
+#         status_code = status.HTTP_200_OK,
+#     )
 
-@router.post('/reset-password/{token}')
-def reset_password(
-        token,
-        password: PasswordResetConfirmModel,
-        service: AuthService = Depends(),
-):
-    pass
+# @router.post('/reset-password/{token}')
+# def reset_password(
+#         token,
+#         password: PasswordResetConfirmModel,
+#         service: AuthService = Depends(),
+# ):
+#     pass
 ############################################
