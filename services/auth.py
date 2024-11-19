@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta, timezone
+from datetime import timedelta
 
 from fastapi import Depends
 from argon2 import PasswordHasher
@@ -28,8 +28,10 @@ class AuthService:
 
     def register(
             self,
-            user_data: UserRegistration
+            token: str,
     ):
+        user_data_dict = decode_url_safe_token(token)
+        user_data = UserRegistration(**user_data_dict)
         existing_user = self.session.query(tables.User).filter(
             or_(
                 tables.User.email == user_data.email,
@@ -136,7 +138,7 @@ class AuthService:
         new_password = password.new_password
         confirm_password = password.confirm_new_password
         if new_password != confirm_password:
-            logger.warning(f"Unsuccessful reset password for user")
+            logger.warning("Unsuccessful reset password for user")
             raise HTTPException(
                 detail="Passwords don't match",
                 status_code=status.HTTP_400_BAD_REQUEST,

@@ -1,5 +1,4 @@
 from typing import Annotated
-from fastapi.security import OAuth2PasswordRequestForm
 
 from fastapi import APIRouter, status
 from fastapi import Depends
@@ -18,12 +17,24 @@ router = APIRouter(
     prefix='/auth'
 )
 
-@router.post('/sign-up')
-def sign_up(
+@router.post('/sign-up-request')
+def sign_up_request(
         user_data : UserRegistration,
-        service : AuthService = Depends(),
 ):
-    return service.register(user_data)
+    email = user_data.email
+    token = create_url_safe_token({"username": user_data.username, "email": email, "password": user_data.password})
+    link = f"http://localhost/auth/sign-up?token={token}"
+    html_message = f'Инструкция для регистрации: <p>{link}</p>'
+    subject = "Registration Instructions"
+    send_email([email], subject, html_message)
+    return JSONResponse(
+        content = {"message": "Email sent"},
+        status_code = status.HTTP_200_OK
+    )
+
+@router.post('/sign-up/{token}')
+def sign_up(token, service: AuthService = Depends()):
+    service.register(token)
 
 
 @router.post('/sign-in', response_model=Token)
