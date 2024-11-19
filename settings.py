@@ -7,7 +7,16 @@ class Settings(BaseSettings):
     jwt_algorithm: str = 'HS256'
     jwt_expiration: int = 3600
     refresh_token_expire: int = 7# неделя
-
+    MAIL_USERNAME: str
+    MAIL_PASSWORD: str
+    MAIL_FROM: str
+    MAIL_PORT: int
+    MAIL_SERVER: str
+    MAIL_FROM_NAME: str
+    MAIL_STARTTLS: bool
+    MAIL_SSL_TLS: bool
+    USE_CREDENTIALS: bool = True
+    VALIDATE_CERTS: bool = True
     class Config:
         env_file = '.env'
         env_file_encoding = 'utf-8'

@@ -1,13 +1,10 @@
-from datetime import datetime, timedelta
-from typing import Annotated
 from datetime import datetime, timedelta, timezone
 
 import jwt
 import logging
-from jwt import ExpiredSignatureError
+
 from sqlalchemy.orm import Session
-from fastapi import HTTPException, Security, Depends, status
-from jwt.exceptions import InvalidTokenError
+from fastapi import HTTPException, Depends, status
 from fastapi.security import HTTPBearer
 
 from database import get_session
@@ -19,6 +16,7 @@ class TokenService:
 
     def __init__(self, session: Session=Depends(get_session)):
         self.session = session
+
 
     @staticmethod
     def get_current_user(credentials=Depends(http_bearer)):
@@ -49,14 +47,6 @@ class TokenService:
             )
         return user_id
 
-    # def create_access_token(self, data: dict, expires_delta: timedelta | None = None, refresh: bool = False):
-    #     payload = {}
-    #     payload['sub'] = data
-    #     payload['exp'] = datetime.now() + (expires_delta if expires_delta is not None else timedelta(seconds=settings.jwt_expiration))
-    #     payload['refresh'] = refresh
-    #
-    #     token = jwt.encode(payload, key=settings.jwt_secret, algorithm=settings.jwt_algorithm)
-    #     return token
 
     def create_access_token(self, data: dict, expires_delta: timedelta | None = None):
         to_encode = data.copy()
@@ -67,6 +57,7 @@ class TokenService:
         to_encode.update({"exp": expire})
         encoded_jwt = jwt.encode(to_encode, settings.jwt_secret, algorithm=settings.jwt_algorithm)
         return encoded_jwt
+
 
     def decode_token(self, token:str) ->dict:
         try:

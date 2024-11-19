@@ -9,3 +9,19 @@
 2024-11-18 23:58:23.168 | ERROR    | services.profile:change_username:53 - Unsuccessful attempt to change username by user with user id: {user_id}. User with this username: {data.new_username} already exists
 2024-11-18 23:58:30.895 | ERROR    | services.profile:change_username:53 - Unsuccessful attempt to change username by user with user id: {user_id}. User with this username: {data.new_username} already exists
 2024-11-18 23:59:36.936 | ERROR    | services.profile:change_username:53 - Unsuccessful attempt to change username by user with user id: {user_id}. User with this username: {data.new_username} already exists
+2024-11-19 17:06:13.169 | INFO     | services.auth:register:54 - User with email: "popovrromma@gmail.com" and username "roman" registered successfully
+2024-11-19 17:06:49.533 | INFO     | services.auth:authenticate_user:84 - Successful login attempt for user popovrromma@gmail.com
+2024-11-19 19:55:19.169 | INFO     | services.auth:register:54 - User with email: "popovroma054@gmail.com" and username "09" registered successfully
+2024-11-19 21:13:24.849 | INFO     | services.auth:authenticate_user:84 - Successful login attempt for user popovroma054@gmail.com
+2024-11-19 21:58:02.870 | INFO     | services.auth:authenticate_user:84 - Successful login attempt for user popovroma054@gmail.com
+2024-11-19 22:07:25.023 | INFO     | services.auth:authenticate_user:86 - Successful login attempt for user popovroma054@gmail.com
+2024-11-19 22:18:21.035 | INFO     | services.auth:password_reset_request:119 - Successful sent instruction for change password for user popovroma054@gmail.com
+2024-11-19 22:31:41.386 | INFO     | services.auth:reset_password:133 - Successful reset password for user popovroma054@gmail.com
+2024-11-19 22:43:04.990 | ERROR    | services.auth:register:37 - User with this email: {user_data.email} or username: {user_data.username} already exists
+2024-11-19 22:43:52.553 | ERROR    | services.auth:register:37 - User with this email: {user_data.email} or username: {user_data.username} already exists
+2024-11-19 22:44:31.251 | WARNING  | services.auth:authenticate_user:63 - Unsuccessful login attempt for user 10
+2024-11-19 22:44:37.645 | INFO     | services.auth:authenticate_user:83 - Successful login attempt for user popovrromma@gmail.com
+2024-11-19 22:45:30.480 | INFO     | services.auth:reset_password:133 - Successful reset password for user popovrromma@gmail.com
+2024-11-19 22:57:10.083 | WARNING  | services.auth:authenticate_user:73 - Unsuccessful login attempt for user 11
+2024-11-19 22:57:14.124 | WARNING  | services.auth:authenticate_user:73 - Unsuccessful login attempt for user 11
+2024-11-19 22:57:26.244 | INFO     | services.auth:authenticate_user:93 - Successful login attempt for user popovrromma@gmail.com
