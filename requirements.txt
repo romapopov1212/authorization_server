@@ -17,3 +17,4 @@ pyjwt
 pydantic[email]
 pydantic-settings
 loguru
+itsdangerous
