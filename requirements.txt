@@ -18,3 +18,4 @@ pydantic[email]
 pydantic-settings
 loguru
 itsdangerous
+fastapi-mail

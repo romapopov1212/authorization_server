@@ -10,6 +10,7 @@ from services.auth import ph
 from database import get_session
 from db import tables
 from logger import logger
+from settings import settings
 
 
 class ProfileService:
@@ -96,6 +97,20 @@ class ProfileService:
         self.session.commit()
         return
 
+    def set_role(self, data):
+        if data.owner_password != settings.OWNER_PASSWORD:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Incorrect password",
+                headers={
+                    'WWW-Authenticate': 'Bearer'
+                },
+            )
+        user = self.get_user_by_email(data.email)
+        user.role = data.role
+        self.session.commit()
+        return
+
     def verify_passwords(self, plain_password, hashed_password):
         try:
             ph.verify(hashed_password, plain_password)
@@ -105,3 +120,10 @@ class ProfileService:
 
     def hash_password(self, password: str) -> str:
         return ph.hash(password)
+
+        def get_user_by_email(
+            self,
+            email: str
+    ):
+            user = self.session.query(tables.User).filter(tables.User.email == email).first()
+            return user

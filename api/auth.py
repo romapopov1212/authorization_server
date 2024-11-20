@@ -45,7 +45,7 @@ def reset_password(
 ):
     return service.reset_password(token, password)
 
-@router.get("/email_confirm/{token}")
+@router.get("/email-confirm/{token}")
 def email_confirm(
         token,
         service: AuthService = Depends(),

@@ -41,3 +41,5 @@ class PasswordResetRequestModel(BaseModel):
 class PasswordResetConfirmModel(BaseModel):
     new_password: str
     confirm_new_password: str
+
+

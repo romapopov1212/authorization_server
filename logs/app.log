@@ -48,3 +48,5 @@
 2024-11-21 00:06:13.701 | INFO     | services.token:get_current_user:53 - User ID: 1
 2024-11-21 00:07:34.841 | INFO     | services.auth:verify_user_account:172 - Account verified successfully for user 1
 2024-11-21 00:15:58.928 | INFO     | services.auth:register:59 - User with email: "rtbf228@example.com" and username "lera" registered successfully
+2024-11-20 23:36:27.560 | ERROR    | services.auth:register:42 - User with this email: tutikosnov@gmail.com or username: tutik77 already exists
+2024-11-20 23:58:33.819 | ERROR    | services.auth:register:42 - User with this email: nikolaj.tutik@mail.ru or username: kolyan already exists
