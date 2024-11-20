@@ -26,12 +26,12 @@ def _change_password(
     service.change_password(current_user, data)
 
 @router.patch('/change_email')
-def _change_email(
+async def _change_email(
     data: ToChangeEmail,
     current_user: str = Depends(TokenService.get_current_user),
     service : ProfileService = Depends()
 ):
-    service.change_email(current_user, data)
+    await service.change_email(current_user, data)
 
 @router.patch('/change_username')
 def _change_username(

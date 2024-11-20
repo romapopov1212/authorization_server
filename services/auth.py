@@ -72,7 +72,7 @@ class AuthService:
         html_message = f'Инструкция для сброса пароля: <p>{link}</p>'
         subject = "Reset Your Password"
         await send_email([email], subject, html_message)
-        logger.info(f"Successful reset password for user {email}")
+        logger.info(f"Successful request for change password {email}")
         return JSONResponse(
             content={
                 "message": "На вашу почту отправлена инструкция для сброса пароля",
@@ -129,7 +129,6 @@ class AuthService:
         self.session.commit()
 
         return user
-
 
 
     def get_user_by_email(

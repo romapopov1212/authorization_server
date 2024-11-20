@@ -43,3 +43,8 @@
 2024-11-20 21:33:55.937 | ERROR    | utils:decode_url_safe_token:28 - Signature b'_U0o9FiYEkJt-SU6hdwrPTd11YM' does not match
 2024-11-20 21:34:26.798 | ERROR    | utils:decode_url_safe_token:28 - Signature b'_U0o9FiYEkJt-SU6hdwrPTd11YM' does not match
 2024-11-20 21:34:26.799 | ERROR    | services.auth:reset_password:200 - Token decoding failed
+2024-11-21 00:04:59.362 | ERROR    | services.auth:authenticate_user:92 - Unsuccessful login attempt for user 1
+2024-11-21 00:05:04.527 | INFO     | services.auth:authenticate_user:112 - Successful login attempt for user popovroma054@gmail.com
+2024-11-21 00:06:13.701 | INFO     | services.token:get_current_user:53 - User ID: 1
+2024-11-21 00:07:34.841 | INFO     | services.auth:verify_user_account:172 - Account verified successfully for user 1
+2024-11-21 00:15:58.928 | INFO     | services.auth:register:59 - User with email: "rtbf228@example.com" and username "lera" registered successfully

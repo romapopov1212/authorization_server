@@ -2,12 +2,15 @@ from fastapi import Depends
 from argon2.exceptions import VerifyMismatchError
 from sqlalchemy.orm import Session
 from fastapi import HTTPException, status
+from fastapi.responses import JSONResponse
+
+from celery_tasks import send_email_to_confirm
 from services.auth import ph
 
 from database import get_session
 from db import tables
 from logger import logger
-from services.auth import AuthService
+
 
 class ProfileService:
 
@@ -21,7 +24,7 @@ class ProfileService:
         ).filter_by(id=user_id).first()
         return {"username": user.username, "email": user.email}
 
-    def change_email(self, user_id, data):
+    async def change_email(self, user_id, data):
         existing_user = self.session.query(tables.User).filter(tables.User.email == data.new_email).first()
 
         if existing_user:
@@ -36,6 +39,7 @@ class ProfileService:
 
         user = self.session.query(tables.User).filter_by(id=user_id).first()
         if not self.verify_passwords(data.password, user.password_hash):
+            logger.error(f"Incorrect password for user {user_id}")
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="Incorrect password",
@@ -48,9 +52,15 @@ class ProfileService:
         self.session.commit()
 
         
-        #AuthService().send_email_to_confirm(data.new_email)
+        await send_email_to_confirm(data.new_email)
+        logger.info(f"Successful request to confirm email {user.email}")
+        return JSONResponse(
+            content={
+                "message": "На вашу почту отправлена инструкция для подтверждения почты",
+            },
+            status_code=status.HTTP_200_OK,
+        )
 
-        return
 
     def change_username(self, user_id, data):
         existing_user = self.session.query(tables.User).filter(tables.User.username == data.new_username).first()
