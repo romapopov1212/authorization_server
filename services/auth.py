@@ -1,4 +1,3 @@
-from __future__ import annotations
 from datetime import timedelta
 
 from fastapi import Depends
@@ -12,12 +11,12 @@ from sqlalchemy import or_
 
 from database import get_session
 from db import tables
-from models.auth import Token, UserRegistration, PasswordResetConfirmModel
+from models.auth import Token, UserRegistration, PasswordResetConfirmModel, PasswordResetRequestModel
 from settings import settings
 from services.token import TokenService as TS
 from logger import logger
-from utils import create_url_safe_token, decode_url_safe_token
-from celery_tasks import send_email
+from utils import decode_url_safe_token, create_url_safe_token
+from celery_tasks import send_email_to_confirm, send_email
 
 ph = PasswordHasher()
 
@@ -28,11 +27,10 @@ class AuthService:
         self.token_service = token_service
 
 
-    def register(
+    async def register(
             self,
-            user_data: UserRegistration,
+            user_data: UserRegistration
     ):
-
         existing_user = self.session.query(tables.User).filter(
             or_(
                 tables.User.email == user_data.email,
@@ -50,29 +48,37 @@ class AuthService:
                 },
             )
 
-        self.send_email_to_confirm(user_data.email)
-
         user = tables.User(
             email = user_data.email,
             username = user_data.username,
-            password_hash = self.hash_password(user_data.password),
-            is_active = False
+            password_hash = self.hash_password(user_data.password)
         )
-
         self.session.add(user)
         self.session.commit()
+        await send_email_to_confirm(user_data.email)
         logger.info(f"User with email: \"{user_data.email}\" and username \"{user_data.username}\" registered successfully")
         return JSONResponse(
             status_code=status.HTTP_201_CREATED,
-            content={"message": "User registered successfully", "user": user_data.dict()}
+            content={"message": "User registered successfully", "user": user_data.__dict__}
         )
 
-    def send_email_to_confirm(self, email):
+    async def password_reset_request(
+            self,
+            email_data:PasswordResetRequestModel,
+    ):
+        email = email_data.email
         token = create_url_safe_token({"email": email})
-        link = f"http://localhost/auth/email_confirm?token={token}"
-        html_message = f'Инструкция для подтверждения почты: <p>{link}</p>'
-        subject = "Email Confirm Instructions"
-        send_email([email], subject, html_message)
+        link = f"http://localhost/auth/reset-password?token={token}"
+        html_message = f'Инструкция для сброса пароля: <p>{link}</p>'
+        subject = "Reset Your Password"
+        await send_email([email], subject, html_message)
+        logger.info(f"Successful reset password for user {email}")
+        return JSONResponse(
+            content={
+                "message": "На вашу почту отправлена инструкция для сброса пароля",
+            },
+            status_code=status.HTTP_200_OK,
+        )
 
     def authenticate_user(
             self,
@@ -87,15 +93,6 @@ class AuthService:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="Incorrect email or password",
-                headers={
-                    'WWW-Authenticate': 'Bearer'
-                },
-            )
-        if user.is_active is False:
-            logger.warning(f"Unsuccessful login attempt for user {user.id}")
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Confirm your email",
                 headers={
                     'WWW-Authenticate': 'Bearer'
                 },
@@ -134,7 +131,7 @@ class AuthService:
         return user
 
 
-    #повторяется, вынес в функцию
+
     def get_user_by_email(
             self,
             email: str
@@ -149,6 +146,41 @@ class AuthService:
     ) -> str:
         return ph.hash(password)
 
+    def verify_user_account(self, token: str):
+        token_data = decode_url_safe_token(token)
+        if not token_data:
+            logger.error("Token decoding failed")
+            return JSONResponse(
+                content={"message": "Invalid or expired token"},
+                status_code=status.HTTP_400_BAD_REQUEST,
+            )
+        user_email = token_data.get("email")
+        if user_email:
+            user = self.get_user_by_email(user_email)
+
+            if not user:
+                logger.error(f"Unsuccessful confirm email for user: {user.id}")
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail="Incorrect email",
+                    headers={
+                        'WWW-Authenticate': 'Bearer'
+                    },
+                )
+
+            self.update_user(user, {"is_active": True})
+
+            return JSONResponse(
+                content={"message": "Account verified successfully"},
+                status_code=status.HTTP_200_OK,
+            )
+
+        return JSONResponse(
+            content={"message": "Error occured during verification"},
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+        )
+
+
 
     def reset_password(
             self,
@@ -158,12 +190,18 @@ class AuthService:
         new_password = password.new_password
         confirm_password = password.confirm_new_password
         if new_password != confirm_password:
-            logger.warning("Unsuccessful reset password for user")
+            logger.warning(f"Unsuccessful reset password for user")
             raise HTTPException(
                 detail="Passwords don't match",
                 status_code=status.HTTP_400_BAD_REQUEST,
             )
         token_data = decode_url_safe_token(token)
+        if not token_data:
+            logger.error("Token decoding failed")
+            return JSONResponse(
+                content={"message": "Invalid or expired token"},
+                status_code=status.HTTP_400_BAD_REQUEST,
+            )
         user_email = token_data.get("email")
 
         if user_email:
@@ -193,26 +231,3 @@ class AuthService:
             return True
         except VerifyMismatchError:
             return False
-
-
-    def activate_user(self, token: str):
-        token_data = decode_url_safe_token(token)
-        user_email = token_data.get("email")
-        if user_email:
-            user = self.get_user_by_email(user_email)
-            if not user:
-                logger.warning(f"Unsuccessful activation for user {user.email}")
-                raise HTTPException(
-                    status_code=status.HTTP_401_UNAUTHORIZED,
-                )
-            self.update_user(user, {"is_active": True})
-            logger.info(f"Successful activation for user {user.email}")
-            return JSONResponse(
-                content={"message": "User Activated Successfully"},
-                status_code=status.HTTP_200_OK,
-            )
-        logger.warning(f"Unsuccessful activation for user {user_email}")
-        return JSONResponse(
-            content={"message": "Error occured during activation."},
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-        )

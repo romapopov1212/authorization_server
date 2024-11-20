@@ -25,3 +25,21 @@
 2024-11-19 22:57:10.083 | WARNING  | services.auth:authenticate_user:73 - Unsuccessful login attempt for user 11
 2024-11-19 22:57:14.124 | WARNING  | services.auth:authenticate_user:73 - Unsuccessful login attempt for user 11
 2024-11-19 22:57:26.244 | INFO     | services.auth:authenticate_user:93 - Successful login attempt for user popovrromma@gmail.com
+2024-11-20 20:32:16.649 | INFO     | services.auth:register:57 - User with email: "popovroma054@gmail.com" and username "rtbf" registered successfully
+2024-11-20 20:32:30.851 | INFO     | services.auth:authenticate_user:93 - Successful login attempt for user popovroma054@gmail.com
+2024-11-20 20:33:03.761 | INFO     | api.auth:password_reset_request:48 - Successful reset password for user popovroma054@gmail.com
+2024-11-20 20:33:59.949 | INFO     | services.auth:reset_password:156 - Successful reset password for user popovroma054@gmail.com
+2024-11-20 20:34:33.721 | INFO     | services.auth:authenticate_user:93 - Successful login attempt for user popovroma054@gmail.com
+2024-11-20 20:44:53.246 | INFO     | services.auth:register:59 - User with email: "popovrromma@gmail.com" and username "lera" registered successfully
+2024-11-20 21:02:56.161 | INFO     | services.auth:register:59 - User with email: "popovrromma@gmail.com" and username "lera" registered successfully
+2024-11-20 21:17:34.196 | ERROR    | utils:decode_url_safe_token:28 - Signature b'-G1IhNyL80e364Pgjuz0ZoCq8' does not match
+2024-11-20 21:24:15.670 | INFO     | services.auth:password_reset_request:75 - Successful reset password for user popovroma054@gmail.com
+2024-11-20 21:24:59.334 | INFO     | services.auth:reset_password:197 - Successful reset password for user popovroma054@gmail.com
+2024-11-20 21:25:15.914 | INFO     | services.auth:authenticate_user:112 - Successful login attempt for user popovroma054@gmail.com
+2024-11-20 21:26:14.450 | ERROR    | utils:decode_url_safe_token:28 - Signature b'jxG-1o_cMbVZ3zmeIRCtJW0YnXIax9ARMYw8pyAEm14' does not match
+2024-11-20 21:30:53.866 | ERROR    | utils:decode_url_safe_token:28 - Signature b'jxG-1o_cMbVZ3zmeIRCtJW0YnXIax9ARMYw8pyAEm14' does not match
+2024-11-20 21:33:20.835 | ERROR    | utils:decode_url_safe_token:28 - Signature b'jxG-1o_cMbVZ3zmeIRCtJW0YnXIax9ARMYw8pyAEm14' does not match
+2024-11-20 21:33:20.835 | ERROR    | services.auth:verify_user_account:152 - Token decoding failed
+2024-11-20 21:33:55.937 | ERROR    | utils:decode_url_safe_token:28 - Signature b'_U0o9FiYEkJt-SU6hdwrPTd11YM' does not match
+2024-11-20 21:34:26.798 | ERROR    | utils:decode_url_safe_token:28 - Signature b'_U0o9FiYEkJt-SU6hdwrPTd11YM' does not match
+2024-11-20 21:34:26.799 | ERROR    | services.auth:reset_password:200 - Token decoding failed

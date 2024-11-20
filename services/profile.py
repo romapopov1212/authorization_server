@@ -48,7 +48,7 @@ class ProfileService:
         self.session.commit()
 
         
-        AuthService().send_email_to_confirm(data.new_email)
+        #AuthService().send_email_to_confirm(data.new_email)
 
         return
 
