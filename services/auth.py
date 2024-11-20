@@ -39,7 +39,7 @@ class AuthService:
         ).first()
 
         if existing_user:
-            logger.error("User with this email: {user_data.email} or username: {user_data.username} already exists")
+            logger.error(f"User with this email: {user_data.email} or username: {user_data.username} already exists")
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="User with this email or username already exists",
@@ -89,7 +89,7 @@ class AuthService:
         user = self.get_user_by_email(user_email)
         access_token_expires = timedelta(seconds=settings.jwt_expiration)
         if not user or not self.verify_passwords(password, user.password_hash):
-            logger.warning(f"Unsuccessful login attempt for user {user.id}")
+            logger.error(f"Unsuccessful login attempt for user {user.id}")
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="Incorrect email or password",
@@ -111,7 +111,7 @@ class AuthService:
                 )
                 logger.info(f"Successful login attempt for user {user.email}")
                 return Token(access_token=access_token, refresh_token=refresh_token)
-        logger.warning(f"Unsuccessful login attempt for user {user.id}")
+        logger.error(f"Unsuccessful login attempt for user {user.id}")
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Incorrect username or password",
@@ -169,12 +169,12 @@ class AuthService:
                 )
 
             self.update_user(user, {"is_active": True})
-
+            logger.info(f"Account verified successfully for user {user.id}")
             return JSONResponse(
                 content={"message": "Account verified successfully"},
                 status_code=status.HTTP_200_OK,
             )
-
+        logger.error(f"Unsuccessful confirm email for user: {user_email}")
         return JSONResponse(
             content={"message": "Error occured during verification"},
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,

@@ -9,6 +9,7 @@ from fastapi.security import HTTPBearer
 
 from database import get_session
 from settings import settings
+from logger import logger
 
 http_bearer = HTTPBearer(auto_error=False)
 
@@ -21,6 +22,7 @@ class TokenService:
     @staticmethod
     def get_current_user(credentials=Depends(http_bearer)):
         if not credentials:
+            logger.error("No credentials provided")
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="Not authenticated",
@@ -31,20 +33,24 @@ class TokenService:
             payload = jwt.decode(token, key=settings.jwt_secret, algorithms=settings.jwt_algorithm)
             user_id: str = payload.get("sub")
             if user_id is None:
+                logger.error(f"No user id provided")
                 raise HTTPException(
                     status_code=status.HTTP_401_UNAUTHORIZED,
                     detail="Invalid token",
                 )
         except jwt.ExpiredSignatureError:
+            logger.error(f"Token expired")
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="Token has expired",
             )
         except jwt.PyJWTError:
+            logger.error(f"Invalid token")
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="Invalid token",
             )
+        logger.info(f"User ID: {user_id}")
         return user_id
 
 
