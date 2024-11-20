@@ -1,3 +1,4 @@
+from __future__ import annotations
 from datetime import timedelta
 
 from fastapi import Depends
@@ -15,7 +16,8 @@ from models.auth import Token, UserRegistration, PasswordResetConfirmModel
 from settings import settings
 from services.token import TokenService as TS
 from logger import logger
-from utils import decode_url_safe_token
+from utils import create_url_safe_token, decode_url_safe_token
+from celery_tasks import send_email
 
 ph = PasswordHasher()
 
@@ -28,10 +30,9 @@ class AuthService:
 
     def register(
             self,
-            token: str,
+            user_data: UserRegistration,
     ):
-        user_data_dict = decode_url_safe_token(token)
-        user_data = UserRegistration(**user_data_dict)
+
         existing_user = self.session.query(tables.User).filter(
             or_(
                 tables.User.email == user_data.email,
@@ -49,11 +50,15 @@ class AuthService:
                 },
             )
 
+        self.send_email_to_confirm(user_data.email)
+
         user = tables.User(
             email = user_data.email,
             username = user_data.username,
-            password_hash = self.hash_password(user_data.password)
+            password_hash = self.hash_password(user_data.password),
+            is_active = False
         )
+
         self.session.add(user)
         self.session.commit()
         logger.info(f"User with email: \"{user_data.email}\" and username \"{user_data.username}\" registered successfully")
@@ -62,6 +67,12 @@ class AuthService:
             content={"message": "User registered successfully", "user": user_data.dict()}
         )
 
+    def send_email_to_confirm(self, email):
+        token = create_url_safe_token({"email": email})
+        link = f"http://localhost/auth/email_confirm?token={token}"
+        html_message = f'Инструкция для подтверждения почты: <p>{link}</p>'
+        subject = "Email Confirm Instructions"
+        send_email([email], subject, html_message)
 
     def authenticate_user(
             self,
@@ -76,6 +87,15 @@ class AuthService:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="Incorrect email or password",
+                headers={
+                    'WWW-Authenticate': 'Bearer'
+                },
+            )
+        if user.is_active is False:
+            logger.warning(f"Unsuccessful login attempt for user {user.id}")
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Confirm your email",
                 headers={
                     'WWW-Authenticate': 'Bearer'
                 },
@@ -174,3 +194,25 @@ class AuthService:
         except VerifyMismatchError:
             return False
 
+
+    def activate_user(self, token: str):
+        token_data = decode_url_safe_token(token)
+        user_email = token_data.get("email")
+        if user_email:
+            user = self.get_user_by_email(user_email)
+            if not user:
+                logger.warning(f"Unsuccessful activation for user {user.email}")
+                raise HTTPException(
+                    status_code=status.HTTP_401_UNAUTHORIZED,
+                )
+            self.update_user(user, {"is_active": True})
+            logger.info(f"Successful activation for user {user.email}")
+            return JSONResponse(
+                content={"message": "User Activated Successfully"},
+                status_code=status.HTTP_200_OK,
+            )
+        logger.warning(f"Unsuccessful activation for user {user_email}")
+        return JSONResponse(
+            content={"message": "Error occured during activation."},
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+        )

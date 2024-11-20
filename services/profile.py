@@ -7,6 +7,7 @@ from services.auth import ph
 from database import get_session
 from db import tables
 from logger import logger
+from services.auth import AuthService
 
 class ProfileService:
 
@@ -43,7 +44,12 @@ class ProfileService:
                 },
             )
         user.email = data.new_email
+        user.is_active = False
         self.session.commit()
+
+        
+        AuthService().send_email_to_confirm(data.new_email)
+
         return
 
     def change_username(self, user_id, data):

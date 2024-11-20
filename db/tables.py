@@ -9,3 +9,4 @@ class User(Base):
     username = Column(String, unique=True)
     email = Column(String, unique=True)
     password_hash = Column(Text)
+    is_active = Column(Boolean, default=False)

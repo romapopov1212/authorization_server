@@ -17,25 +17,13 @@ router = APIRouter(
     prefix='/auth'
 )
 
-@router.post('/sign-up-request')
-def sign_up_request(
-        user_data : UserRegistration,
-):
-    email = user_data.email
-    token = create_url_safe_token({"username": user_data.username, "email": email, "password": user_data.password})
-    link = f"http://localhost/auth/sign-up?token={token}"
-    html_message = f'Инструкция для регистрации: <p>{link}</p>'
-    subject = "Registration Instructions"
-    send_email([email], subject, html_message)
-    return JSONResponse(
-        content = {"message": "Email sent"},
-        status_code = status.HTTP_200_OK
-    )
+@router.post('/sign-up')
+def sign_up(user_data: UserRegistration, service: AuthService = Depends()):
+    service.register(user_data)
 
-@router.post('/sign-up/{token}')
-def sign_up(token, service: AuthService = Depends()):
-    service.register(token)
-
+@router.patch('/email_confirm/{token}')
+def confirm_email(token: str, service: AuthService = Depends()):
+    return service.activate_user(token)
 
 @router.post('/sign-in', response_model=Token)
 def sign_in(
