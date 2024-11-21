@@ -25,8 +25,8 @@ router = APIRouter(
 
 @router.post('/sign-up')
 async def sign_up(
-        user_data : UserRegistration,
-        service : AuthService = Depends(),
+        user_data: UserRegistration,
+        service: AuthService = Depends(),
 ):
     return await service.register(user_data)
 

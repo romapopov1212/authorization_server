@@ -39,13 +39,15 @@ class TokenService:
                     status_code=status.HTTP_401_UNAUTHORIZED,
                     detail="Invalid token",
                 )
-            # issuer = payload.get("iss")
-            # if issuer != settings.jwt_issuer:
-            #     logger.error(f"Invalid issuer")
-            #     raise HTTPException(
-            #         status_code=status.HTTP_401_UNAUTHORIZED,
-            #         detail="Invalid token",
-            #     )
+                
+            issuer = payload.get("iss")
+            if issuer != settings.jwt_issuer:
+                logger.error(f"Invalid issuer")
+                raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                    detail="Invalid token",
+                )
+
         except jwt.ExpiredSignatureError:
             logger.error(f"Token expired")
             raise HTTPException(
@@ -73,7 +75,7 @@ class TokenService:
                 "id": str(data.get("id")),
                 "exp": expire,
                 "refresh" : refresh,
-                #"iss": settings.jwt_issuer
+                "iss": settings.jwt_issuer
             }
 
         )

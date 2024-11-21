@@ -1,6 +1,7 @@
+from __future__ import annotations
 from typing import Optional
 from fastapi import Form
-from pydantic import EmailStr, BaseModel
+from pydantic import EmailStr, BaseModel, field_validator
 
 
 class OAuth2EmailPasswordRequestForm:
@@ -18,6 +19,10 @@ class BaseUser(BaseModel):
 
 class UserRegistration(BaseUser):
     password: str
+
+    @field_validator("password")
+    def password_complexity(cls, v):
+        return PasswordValidator.validate_password(v)
 
 class User(BaseUser):
     id: Optional[int] = None
@@ -49,6 +54,25 @@ class PasswordResetConfirmModel(BaseModel):
     new_password: str
     confirm_new_password: str
 
+    @field_validator("new_password")
+    def password_complexity(cls, v):
+        return PasswordValidator.validate_password(v)
+
 class UserRequestSchema(BaseModel):
     user_id: str
     token: str | None = None
+
+class PasswordValidator:
+    @staticmethod
+    def validate_password(v: str) -> str:
+        if len(v) < 8:
+            raise ValueError("Password should be at least 8 characters long")
+        if not any(char.isdigit() for char in v):
+            raise ValueError("Password should contain at least one number")
+        if not any(char.isupper() for char in v):
+            raise ValueError("Password should contain at least one capital letter")
+        if not any(char.islower() for char in v):
+            raise ValueError("Password should contain at least one small letter")
+        if not any(char in '!@#$%^&*()_+-=' for char in v):
+            raise ValueError("Password should contain at least one special character")
+        return v
