@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 from fastapi import Depends
 
-from models.profile import ProfileOut, ToChangeEmail, ToChangePassword, ToChangeUsername, SetRole
+from models.profile import ProfileOut, ToChangeEmail, ToChangePassword, ToChangeUsername, SetRoleModel
 from services.profile import ProfileService
 from services.token import TokenService
 
@@ -43,7 +43,7 @@ def _change_username(
 
 @router.get("/set-role")
 def set_role(
-    data = SetRole,
+    data = SetRoleModel,
     service: ProfileService = Depends(),
 ):
     service.set_role(data)

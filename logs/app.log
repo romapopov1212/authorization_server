@@ -50,3 +50,35 @@
 2024-11-21 00:15:58.928 | INFO     | services.auth:register:59 - User with email: "rtbf228@example.com" and username "lera" registered successfully
 2024-11-20 23:36:27.560 | ERROR    | services.auth:register:42 - User with this email: tutikosnov@gmail.com or username: tutik77 already exists
 2024-11-20 23:58:33.819 | ERROR    | services.auth:register:42 - User with this email: nikolaj.tutik@mail.ru or username: kolyan already exists
+2024-11-21 12:20:25.469 | INFO     | services.auth:register:59 - User with email: "popovrromma@gmail.com" and username "rtbf" registered successfully
+2024-11-21 12:21:18.894 | INFO     | services.auth:verify_user_account:171 - Account verified successfully for user 5
+2024-11-21 12:24:30.720 | INFO     | services.auth:authenticate_user:112 - Successful login attempt for user popovrromma@gmail.com
+2024-11-21 12:35:08.322 | ERROR    | services.token:get_current_user:43 - Invalid issuer
+2024-11-21 12:35:49.430 | INFO     | services.token:get_current_user:60 - User ID: 5
+2024-11-21 23:30:29.278 | INFO     | services.auth:authenticate_user:119 - Successful login attempt for user popovrromma@gmail.com
+2024-11-21 23:30:53.378 | ERROR    | services.token:get_current_user:37 - No user id provided
+2024-11-21 23:38:30.974 | ERROR    | services.token:get_current_user:37 - No user id provided
+2024-11-21 23:38:49.381 | INFO     | services.auth:authenticate_user:119 - Successful login attempt for user popovrromma@gmail.com
+2024-11-21 23:39:06.183 | ERROR    | services.token:get_current_user:56 - Invalid token
+2024-11-21 23:45:53.162 | INFO     | services.auth:authenticate_user:118 - Successful login attempt for user popovrromma@gmail.com
+2024-11-21 23:46:07.589 | INFO     | services.token:get_current_user:61 - User ID: 5
+2024-11-22 00:00:27.191 | INFO     | services.auth:authenticate_user:118 - Successful login attempt for user popovrromma@gmail.com
+2024-11-22 00:31:24.283 | INFO     | services.auth:authenticate_user:118 - Successful login attempt for user popovrromma@gmail.com
+2024-11-22 00:35:05.054 | INFO     | services.auth:authenticate_user:119 - Successful login attempt for user popovrromma@gmail.com
+2024-11-22 00:39:38.212 | INFO     | services.auth:authenticate_user:119 - Successful login attempt for user popovrromma@gmail.com
+2024-11-22 00:42:53.200 | INFO     | services.auth:authenticate_user:119 - Successful login attempt for user popovrromma@gmail.com
+2024-11-22 00:43:59.490 | INFO     | services.auth:authenticate_user:119 - Successful login attempt for user popovrromma@gmail.com
+2024-11-22 00:47:38.718 | INFO     | services.auth:authenticate_user:119 - Successful login attempt for user popovrromma@gmail.com
+2024-11-22 00:53:37.302 | INFO     | services.auth:authenticate_user:119 - Successful login attempt for user popovrromma@gmail.com
+2024-11-22 00:55:34.072 | INFO     | services.auth:authenticate_user:119 - Successful login attempt for user popovrromma@gmail.com
+2024-11-22 00:57:32.258 | INFO     | services.auth:authenticate_user:119 - Successful login attempt for user popovrromma@gmail.com
+2024-11-22 01:03:02.706 | INFO     | services.auth:authenticate_user:119 - Successful login attempt for user popovrromma@gmail.com
+2024-11-22 01:10:37.037 | INFO     | services.auth:authenticate_user:119 - Successful login attempt for user popovrromma@gmail.com
+2024-11-22 01:10:50.144 | INFO     | services.token:get_current_user:61 - User ID: 5
+2024-11-22 01:11:23.968 | INFO     | services.auth:password_reset_request:75 - Successful request for change password popovrromma@gmail.com
+2024-11-22 01:12:06.794 | INFO     | services.auth:reset_password:222 - Successful reset password for user popovrromma@gmail.com
+2024-11-22 01:12:17.165 | INFO     | services.auth:reset_password:222 - Successful reset password for user popovrromma@gmail.com
+2024-11-22 01:12:28.276 | INFO     | services.auth:authenticate_user:119 - Successful login attempt for user popovrromma@gmail.com
+2024-11-22 01:12:57.706 | INFO     | services.token:get_current_user:61 - User ID: 5
+2024-11-22 01:13:08.168 | INFO     | services.token:get_current_user:61 - User ID: 5
+2024-11-22 01:13:12.030 | INFO     | services.token:get_current_user:61 - User ID: 5

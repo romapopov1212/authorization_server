@@ -34,6 +34,13 @@ class UserLogin(BaseModel):
     email: EmailStr
     password: str
 
+class Otp(BaseUser):
+    otp_enabled: bool = False
+    otp_verified: bool = False
+
+    otp_base32: str | None = None
+    otp_auth_url: str | None = None
+
 class PasswordResetRequestModel(BaseModel):
     email: str
 
@@ -42,4 +49,6 @@ class PasswordResetConfirmModel(BaseModel):
     new_password: str
     confirm_new_password: str
 
-
+class UserRequestSchema(BaseModel):
+    user_id: str
+    token: str | None = None

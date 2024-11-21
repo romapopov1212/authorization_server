@@ -1,3 +1,4 @@
+import uuid
 from datetime import datetime, timedelta, timezone
 
 import jwt
@@ -38,13 +39,13 @@ class TokenService:
                     status_code=status.HTTP_401_UNAUTHORIZED,
                     detail="Invalid token",
                 )
-            issuer = payload.get("iss")
-            if issuer != settings.jwt_issuer:
-                logger.error(f"Invalid issuer")
-                raise HTTPException(
-                    status_code=status.HTTP_401_UNAUTHORIZED,
-                    detail="Invalid token",
-                )
+            # issuer = payload.get("iss")
+            # if issuer != settings.jwt_issuer:
+            #     logger.error(f"Invalid issuer")
+            #     raise HTTPException(
+            #         status_code=status.HTTP_401_UNAUTHORIZED,
+            #         detail="Invalid token",
+            #     )
         except jwt.ExpiredSignatureError:
             logger.error(f"Token expired")
             raise HTTPException(
@@ -61,13 +62,21 @@ class TokenService:
         return user_id
 
 
-    def create_access_token(self, data: dict, expires_delta: timedelta | None = None):
+    def create_access_token(self, data: dict, expires_delta: timedelta | None = None, refresh: bool = False):
         to_encode = data.copy()
         if expires_delta:
             expire = datetime.now(timezone.utc) + expires_delta
         else:
             expire = datetime.now(timezone.utc) + timedelta(minutes=15)
-        to_encode.update({"exp": expire}, {"iss": settings.jwt_issuer})
+        to_encode.update(
+            {
+                "id": str(data.get("id")),
+                "exp": expire,
+                "refresh" : refresh,
+                #"iss": settings.jwt_issuer
+            }
+
+        )
         encoded_jwt = jwt.encode(to_encode, settings.jwt_secret, algorithm=settings.jwt_algorithm)
         return encoded_jwt
 
@@ -80,18 +89,32 @@ class TokenService:
             logging.exception(e)
             return None
 
-# class AccessTokenBearer(TokenService):
-#     def verify_token(self, token_data: dict) -> None:
-#         if token_data and token_data['refresh']:
-#             raise HTTPException(
-#                 status_code=status.HTTP_403_FORBIDDEN,
-#                 detail="Please provide an access token",
-#             )
-#
-# class RefreshTokenBearer(TokenService):
-#     def verify_token(self, token_data: dict) -> None:
-#         if token_data and not token_data['refresh']:
-#             raise HTTPException(
-#                 status_code=status.HTTP_403_FORBIDDEN,
-#                 detail="Please provide a refresh token",
-#            )
+
+class AccessTokenBearer(TokenService):
+    def verify_token(self, token_data: dict) -> None:
+        if token_data and token_data['refresh']:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="Please provide an access token",
+            )
+
+
+class RefreshTokenBearer(TokenService):
+    def __call__(self, credentials=Depends(http_bearer)) -> dict:
+        if not credentials:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Not authenticated",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
+        token_data = self.decode_token(credentials.credentials)
+
+        self.verify_token(token_data)
+        return token_data
+
+    def verify_token(self, token_data: dict) -> None:
+        if token_data and not token_data.get('refresh'):
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="Please provide a refresh token",
+            )

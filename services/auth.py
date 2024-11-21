@@ -101,13 +101,20 @@ class AuthService:
             password_valid = self.verify_passwords(password, user.password_hash)
             if password_valid:
                 access_token = self.token_service.create_access_token(
-                    data={"sub": str(user.id)},
-                    expires_delta=access_token_expires
+                    # data={"sub": str(user.id)},
+                    #
+                    data = {
+                        "sub" : str(user.id),
+                        "exp": access_token_expires
+                    }
                 )
                 refresh_token = self.token_service.create_access_token(
-                    data={"sub": str(user.id)},
+                    data={
+                        "sub": str(user.id),
+
+                    },
                     expires_delta=timedelta(days=settings.refresh_token_expire),
-                    #refresh = True,
+                    refresh = True,
                 )
                 logger.info(f"Successful login attempt for user {user.email}")
                 return Token(access_token=access_token, refresh_token=refresh_token)

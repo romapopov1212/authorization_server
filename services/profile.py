@@ -121,9 +121,9 @@ class ProfileService:
     def hash_password(self, password: str) -> str:
         return ph.hash(password)
 
-        def get_user_by_email(
-            self,
-            email: str
+    def get_user_by_email(
+        self,
+        email: str
     ):
-            user = self.session.query(tables.User).filter(tables.User.email == email).first()
-            return user
+        user = self.session.query(tables.User).filter(tables.User.email == email).first()
+        return user
