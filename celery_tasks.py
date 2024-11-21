@@ -9,7 +9,7 @@ async def send_email(recipients: list[str], subject: str, body: str):
 
 async def send_email_to_confirm(email):
     token = create_url_safe_token({"email": email})
-    link = f"http://localhost/auth/email_confirm?token={token}"
+    link = f"http://127.0.0.1:8000/auth/email-confirm?token={token}"
     html_message = f'Инструкция для подтверждения почты: <p>{link}</p>'
     subject = "Email Confirm Instructions"
     await send_email([email], subject, html_message)

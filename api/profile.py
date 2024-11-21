@@ -17,7 +17,7 @@ def _get_profile(
 ):
     return service.get_profile(current_user)
 
-@router.patch('/change_password')
+@router.patch('/change-password')
 def _change_password(
     data:  ToChangePassword,
     current_user: str = Depends(TokenService.get_current_user),
@@ -25,7 +25,7 @@ def _change_password(
 ):
     service.change_password(current_user, data)
 
-@router.patch('/change_email')
+@router.patch('/change-email')
 async def _change_email(
     data: ToChangeEmail,
     current_user: str = Depends(TokenService.get_current_user),
@@ -33,7 +33,7 @@ async def _change_email(
 ):
     await service.change_email(current_user, data)
 
-@router.patch('/change_username')
+@router.patch('/change-username')
 def _change_username(
     data: ToChangeUsername,
     current_user: str = Depends(TokenService.get_current_user),
@@ -41,9 +41,9 @@ def _change_username(
 ):
     service.change_username(current_user, data)
 
-@router.get("/set-role")
+@router.patch("/set-role")
 def set_role(
-    data = SetRoleModel,
+    data: SetRoleModel,
     service: ProfileService = Depends(),
 ):
     service.set_role(data)

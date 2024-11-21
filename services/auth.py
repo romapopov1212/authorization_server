@@ -68,7 +68,7 @@ class AuthService:
     ):
         email = email_data.email
         token = create_url_safe_token({"email": email})
-        link = f"http://localhost/auth/reset-password?token={token}"
+        link = f"http://127.0.0.1:8000/auth/reset-password?token={token}"
         html_message = f'Инструкция для сброса пароля: <p>{link}</p>'
         subject = "Reset Your Password"
         await send_email([email], subject, html_message)
@@ -97,12 +97,21 @@ class AuthService:
                     'WWW-Authenticate': 'Bearer'
                 },
             )
+
+        if not user.is_active:
+            logger.error(f"Unsuccessful login attempt for user {user.id}. Account is not confirmed")
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Account is not confirmed",
+                headers={
+                    'WWW-Authenticate': 'Bearer'
+                },
+            )
+
         if user is not None:
             password_valid = self.verify_passwords(password, user.password_hash)
             if password_valid:
                 access_token = self.token_service.create_access_token(
-                    # data={"sub": str(user.id)},
-                    #
                     data = {
                         "sub" : str(user.id),
                         "exp": access_token_expires

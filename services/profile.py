@@ -21,9 +21,10 @@ class ProfileService:
     def get_profile(self, user_id):
         user = self.session.query(
             tables.User.username,
-            tables.User.email
+            tables.User.email,
+            tables.User.role
         ).filter_by(id=user_id).first()
-        return {"username": user.username, "email": user.email}
+        return {"username": user.username, "email": user.email, "role": user.role}
 
     async def change_email(self, user_id, data):
         existing_user = self.session.query(tables.User).filter(tables.User.email == data.new_email).first()

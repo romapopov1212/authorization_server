@@ -82,3 +82,29 @@
 2024-11-22 01:12:57.706 | INFO     | services.token:get_current_user:61 - User ID: 5
 2024-11-22 01:13:08.168 | INFO     | services.token:get_current_user:61 - User ID: 5
 2024-11-22 01:13:12.030 | INFO     | services.token:get_current_user:61 - User ID: 5
+2024-11-21 19:13:50.323 | INFO     | services.auth:register:59 - User with email: "tutikosnov@gmail.com" and username "tutik77" registered successfully
+2024-11-21 19:16:05.724 | INFO     | services.auth:authenticate_user:119 - Successful login attempt for user tutikosnov@gmail.com
+2024-11-21 19:17:43.955 | INFO     | services.auth:verify_user_account:178 - Account verified successfully for user 1
+2024-11-21 19:22:05.554 | INFO     | services.auth:authenticate_user:128 - Successful login attempt for user tutikosnov@gmail.com
+2024-11-21 19:22:52.550 | INFO     | services.auth:register:59 - User with email: "nikolaj.tutik@mail.ru" and username "tutik78" registered successfully
+2024-11-21 19:23:16.700 | ERROR    | services.auth:authenticate_user:102 - Unsuccessful login attempt for user 2. Account is not confirmed
+2024-11-21 19:23:57.322 | INFO     | services.auth:verify_user_account:187 - Account verified successfully for user 2
+2024-11-21 19:24:01.574 | INFO     | services.auth:authenticate_user:128 - Successful login attempt for user nikolaj.tutik@mail.ru
+2024-11-21 19:24:38.182 | INFO     | services.token:get_current_user:61 - User ID: 2
+2024-11-21 19:25:51.603 | INFO     | services.token:get_current_user:61 - User ID: 2
+2024-11-21 19:26:46.016 | INFO     | services.token:get_current_user:61 - User ID: 2
+2024-11-21 19:27:42.217 | INFO     | services.token:get_current_user:61 - User ID: 2
+2024-11-21 19:29:49.865 | ERROR    | services.token:get_current_user:26 - No credentials provided
+2024-11-21 19:30:24.121 | INFO     | services.auth:authenticate_user:128 - Successful login attempt for user nikolaj.tutik@mail.ru
+2024-11-21 19:30:41.857 | INFO     | services.token:get_current_user:61 - User ID: 2
+2024-11-21 19:32:13.701 | INFO     | services.token:get_current_user:61 - User ID: 2
+2024-11-21 19:33:01.259 | INFO     | services.token:get_current_user:61 - User ID: 2
+2024-11-21 19:36:17.283 | INFO     | services.token:get_current_user:61 - User ID: 2
+2024-11-21 19:36:20.506 | INFO     | services.profile:change_email:58 - Successful request to confirm email semka13022007@gmail.com
+2024-11-21 19:37:00.918 | ERROR    | services.auth:authenticate_user:102 - Unsuccessful login attempt for user 2. Account is not confirmed
+2024-11-21 19:37:17.968 | INFO     | services.auth:verify_user_account:187 - Account verified successfully for user 2
+2024-11-21 19:37:22.296 | INFO     | services.auth:authenticate_user:128 - Successful login attempt for user semka13022007@gmail.com
+2024-11-21 19:44:16.234 | INFO     | services.auth:register:59 - User with email: "nikolaj.tutik@mail.ru" and username "tutik88" registered successfully
+2024-11-21 19:45:09.039 | ERROR    | services.auth:authenticate_user:102 - Unsuccessful login attempt for user 3. Account is not confirmed
+2024-11-21 19:45:19.887 | INFO     | services.auth:verify_user_account:187 - Account verified successfully for user 3
+2024-11-21 19:45:24.583 | INFO     | services.auth:authenticate_user:128 - Successful login attempt for user nikolaj.tutik@mail.ru

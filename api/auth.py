@@ -46,7 +46,7 @@ async def password_reset_request(
     return await service.password_reset_request(email_data)
 
 
-@router.post('/reset-password/{token}')
+@router.post('/reset-password')
 def reset_password(
         token,
         password: PasswordResetConfirmModel,
@@ -54,7 +54,7 @@ def reset_password(
 ):
     return service.reset_password(token, password)
 
-@router.get("/email-confirm/{token}")
+@router.get("/email-confirm")
 def email_confirm(
         token,
         service: AuthService = Depends(),
