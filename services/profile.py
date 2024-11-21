@@ -22,9 +22,8 @@ class ProfileService:
         user = self.session.query(
             tables.User.username,
             tables.User.email,
-            tables.User.role
         ).filter_by(id=user_id).first()
-        return {"username": user.username, "email": user.email, "role": user.role}
+        return {"username": user.username, "email": user.email}
 
     async def change_email(self, user_id, data):
         existing_user = self.session.query(tables.User).filter(tables.User.email == data.new_email).first()
@@ -95,20 +94,6 @@ class ProfileService:
                 },
             )
         user.password_hash = self.hash_password(data.new_password)
-        self.session.commit()
-        return
-
-    def set_role(self, data):
-        if data.owner_password != settings.OWNER_PASSWORD:
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Incorrect password",
-                headers={
-                    'WWW-Authenticate': 'Bearer'
-                },
-            )
-        user = self.get_user_by_email(data.email)
-        user.role = data.role
         self.session.commit()
         return
 

@@ -39,7 +39,7 @@ class TokenService:
                     status_code=status.HTTP_401_UNAUTHORIZED,
                     detail="Invalid token",
                 )
-                
+
             issuer = payload.get("iss")
             if issuer != settings.jwt_issuer:
                 logger.error(f"Invalid issuer")

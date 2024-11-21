@@ -121,3 +121,4 @@
 2024-11-21 21:15:53.901 | ERROR    | services.token:get_current_user:58 - Invalid token
 2024-11-21 21:20:26.519 | ERROR    | services.token:get_current_user:58 - Invalid token
 2024-11-21 21:21:28.376 | INFO     | services.token:get_current_user:63 - User ID: 1
+2024-11-21 23:39:08.993 | INFO     | services.auth:register:59 - User with email: "user@example.com" and username "string" registered successfully
