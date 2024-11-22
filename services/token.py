@@ -5,8 +5,9 @@ import jwt
 import logging
 
 from sqlalchemy.orm import Session
-from fastapi import HTTPException, Depends, status
+from fastapi import HTTPException, Depends, status, Request
 from fastapi.security import HTTPBearer
+from fastapi.security.http import HTTPAuthorizationCredentials
 
 from database import get_session
 from settings import settings
@@ -72,7 +73,6 @@ class TokenService:
             expire = datetime.now(timezone.utc) + timedelta(minutes=15)
         to_encode.update(
             {
-                "id": str(data.get("id")),
                 "exp": expire,
                 "refresh" : refresh,
                 "iss": settings.jwt_issuer
@@ -95,6 +95,7 @@ class TokenService:
 class AccessTokenBearer(TokenService):
     def verify_token(self, token_data: dict) -> None:
         if token_data and token_data['refresh']:
+            logger.error("Not a access token provided")
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
                 detail="Please provide an access token",
@@ -104,6 +105,7 @@ class AccessTokenBearer(TokenService):
 class RefreshTokenBearer(TokenService):
     def __call__(self, credentials=Depends(http_bearer)) -> dict:
         if not credentials:
+            logger.error("No authenticated")
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="Not authenticated",
@@ -114,8 +116,10 @@ class RefreshTokenBearer(TokenService):
         self.verify_token(token_data)
         return token_data
 
+
     def verify_token(self, token_data: dict) -> None:
         if token_data and not token_data.get('refresh'):
+            logger.error("Not a refresh token provided")
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
                 detail="Please provide a refresh token",

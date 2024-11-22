@@ -1,4 +1,4 @@
-from datetime import timedelta
+from datetime import timedelta, datetime
 
 from fastapi import Depends
 from argon2 import PasswordHasher
@@ -9,11 +9,12 @@ from fastapi import status
 from fastapi.responses import JSONResponse
 from sqlalchemy import or_
 
+
 from database import get_session
 from db import tables
 from models.auth import Token, UserRegistration, PasswordResetConfirmModel, PasswordResetRequestModel
 from settings import settings
-from services.token import TokenService as TS
+from services.token import TokenService as TS, RefreshTokenBearer
 from logger import logger
 from utils import decode_url_safe_token, create_url_safe_token
 from celery_tasks import send_email_to_confirm, send_email
@@ -62,6 +63,7 @@ class AuthService:
             content={"message": "User registered successfully", "user": user_data.__dict__}
         )
 
+
     async def password_reset_request(
             self,
             email_data:PasswordResetRequestModel,
@@ -79,6 +81,7 @@ class AuthService:
             },
             status_code=status.HTTP_200_OK,
         )
+
 
     def authenticate_user(
             self,
@@ -134,6 +137,23 @@ class AuthService:
         )
 
 
+    def get_new_refresh_token(
+            self,
+            token_detail: dict = Depends(RefreshTokenBearer()),
+    ):
+        expiry_timestamp = token_detail['exp']
+
+        if datetime.fromtimestamp(expiry_timestamp) > datetime.now():
+            new_access_token = self.token_service.create_access_token(
+                data={
+                    "sub": str(token_detail['sub']),
+                },
+            )
+
+            return JSONResponse({'access_token': new_access_token})
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail='Invalid or expired Token')
+
+
     def update_user(
             self,
             user: tables.User,
@@ -160,6 +180,7 @@ class AuthService:
             password: str
     ) -> str:
         return ph.hash(password)
+
 
     def verify_user_account(self, token: str):
         token_data = decode_url_safe_token(token)

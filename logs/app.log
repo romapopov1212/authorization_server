@@ -122,3 +122,23 @@
 2024-11-21 21:20:26.519 | ERROR    | services.token:get_current_user:58 - Invalid token
 2024-11-21 21:21:28.376 | INFO     | services.token:get_current_user:63 - User ID: 1
 2024-11-21 23:39:08.993 | INFO     | services.auth:register:59 - User with email: "user@example.com" and username "string" registered successfully
+2024-11-22 18:44:58.720 | INFO     | services.auth:register:59 - User with email: "popocroma054@gmail.com" and username "rtrt" registered successfully
+2024-11-22 18:45:53.409 | INFO     | services.auth:register:59 - User with email: "popovroma054@gmail.com" and username "rtrt" registered successfully
+2024-11-22 18:46:18.281 | INFO     | services.auth:verify_user_account:187 - Account verified successfully for user 7
+2024-11-22 18:46:25.705 | ERROR    | utils:decode_url_safe_token:28 - Signature b'bc8o-lzKg61SJ-kuNUMf3w8UxuA/docs' does not match
+2024-11-22 18:46:25.706 | ERROR    | services.auth:verify_user_account:167 - Token decoding failed
+2024-11-22 18:46:30.421 | ERROR    | utils:decode_url_safe_token:28 - Signature b'bc8o-lzKg61SJ-kuNUMf3w8UxuA/docs' does not match
+2024-11-22 18:46:30.422 | ERROR    | services.auth:verify_user_account:167 - Token decoding failed
+2024-11-22 18:46:35.577 | INFO     | services.auth:verify_user_account:187 - Account verified successfully for user 7
+2024-11-22 18:47:27.483 | INFO     | services.auth:authenticate_user:128 - Successful login attempt for user popovroma054@gmail.com
+2024-11-22 18:47:41.141 | INFO     | services.token:get_current_user:63 - User ID: 7
+2024-11-22 18:48:17.424 | INFO     | services.token:get_current_user:63 - User ID: None
+2024-11-22 19:12:41.399 | ERROR    | services.auth:authenticate_user:92 - Unsuccessful login attempt for user 7
+2024-11-22 19:12:53.124 | INFO     | services.auth:authenticate_user:128 - Successful login attempt for user popovroma054@gmail.com
+2024-11-22 19:13:25.905 | INFO     | services.token:get_current_user:64 - User ID: 7
+2024-11-22 19:14:12.728 | ERROR    | services.auth:authenticate_user:92 - Unsuccessful login attempt for user 5
+2024-11-22 19:14:23.116 | ERROR    | services.auth:authenticate_user:92 - Unsuccessful login attempt for user 5
+2024-11-22 19:14:45.225 | INFO     | services.auth:authenticate_user:128 - Successful login attempt for user popovroma054@gmail.com
+2024-11-22 19:15:21.917 | INFO     | services.token:get_current_user:64 - User ID: 7
+2024-11-22 19:23:26.847 | INFO     | services.auth:authenticate_user:129 - Successful login attempt for user popovroma054@gmail.com
+2024-11-22 19:24:00.210 | INFO     | services.token:get_current_user:64 - User ID: 7
