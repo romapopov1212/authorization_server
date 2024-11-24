@@ -17,6 +17,14 @@ def create_url_safe_token(data: dict):
 
     return token
 
+def verify_token(token: str, expires_in: int):
+    try:
+
+        data = serializer.loads(token, max_age=expires_in)
+        return data
+    except Exception as e:
+        logger.error(f"Token verification failed: {str(e)}")
+        return None
 
 def decode_url_safe_token(token: str):
     try:

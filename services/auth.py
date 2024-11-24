@@ -9,7 +9,7 @@ from fastapi import status
 from fastapi.responses import JSONResponse
 from sqlalchemy import or_
 
-
+from utils import verify_token
 from database import get_session
 from db import tables
 from models.auth import Token, UserRegistration, PasswordResetConfirmModel, PasswordResetRequestModel
@@ -70,6 +70,7 @@ class AuthService:
     ):
         email = email_data.email
         token = create_url_safe_token({"email": email})
+        verify_token(token, expires_in=900)
         link = f"http://127.0.0.1:8000/auth/reset-password?token={token}"
         html_message = f'Инструкция для сброса пароля: <p>{link}</p>'
         subject = "Reset Your Password"

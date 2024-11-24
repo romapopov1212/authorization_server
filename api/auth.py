@@ -65,4 +65,3 @@ def get_new_refresh_token(
 ):
 
     return service.get_new_refresh_token(token_detail)
-

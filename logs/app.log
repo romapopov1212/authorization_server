@@ -142,3 +142,11 @@
 2024-11-22 19:15:21.917 | INFO     | services.token:get_current_user:64 - User ID: 7
 2024-11-22 19:23:26.847 | INFO     | services.auth:authenticate_user:129 - Successful login attempt for user popovroma054@gmail.com
 2024-11-22 19:24:00.210 | INFO     | services.token:get_current_user:64 - User ID: 7
+2024-11-22 22:42:10.955 | ERROR    | services.auth:authenticate_user:95 - Unsuccessful login attempt for user 5
+2024-11-22 22:42:19.472 | INFO     | services.auth:authenticate_user:131 - Successful login attempt for user popovroma054@gmail.com
+2024-11-24 22:48:08.170 | INFO     | services.auth:verify_user_account:208 - Account verified successfully for user 7
+2024-11-24 22:58:16.529 | ERROR    | services.auth:register:43 - User with this email: popovroma054@gmail.com or username: 1234 already exists
+2024-11-24 23:02:09.793 | INFO     | services.auth:register:60 - User with email: "popovroma054@gmail.com" and username "1234" registered successfully
+2024-11-24 23:02:25.718 | INFO     | services.auth:verify_user_account:208 - Account verified successfully for user 10
+2024-11-24 23:06:45.033 | INFO     | services.auth:register:60 - User with email: "popovroma054@gmail.com" and username "1234" registered successfully
+2024-11-24 23:07:05.462 | INFO     | services.auth:verify_user_account:209 - Account verified successfully for user 11
