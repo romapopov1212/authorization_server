@@ -4,6 +4,7 @@ postgres
 pydantic
 sqlalchemy
 psycopg2
+asyncpg
 python-dotenv
 alembic
 python-jose
