@@ -7,7 +7,7 @@ import logging
 from sqlalchemy.orm import Session
 from fastapi import HTTPException, Depends, status, Request
 from fastapi.security import HTTPBearer
-from fastapi.security.http import HTTPAuthorizationCredentials
+
 
 from database import get_session
 from settings import settings

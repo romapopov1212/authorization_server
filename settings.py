@@ -19,6 +19,7 @@ class Settings(BaseSettings):
     USE_CREDENTIALS: bool = True
     VALIDATE_CERTS: bool = True
     OWNER_PASSWORD: str
+    TOTP_SECRET: str
     class Config:
         env_file = '.env'
         env_file_encoding = 'utf-8'

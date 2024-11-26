@@ -66,6 +66,9 @@ class UserRequestSchema(BaseModel):
     user_id: str
     token: str | None = None
 
+class UserTwoFa(BaseUser):
+    is_2fa: bool
+
 class PasswordValidator:
     @staticmethod
     def validate_password(v: str) -> str:
