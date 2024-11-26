@@ -1,5 +1,6 @@
 from fastapi import HTTPException, Depends, status 
-from sqlalchemy.orm import Session  
+from sqlalchemy.orm import Session
+from sqlalchemy.future import select
 
 from db import tables
 from database import get_session
@@ -21,14 +22,18 @@ class OwnerService():
     def __init__(self, session: Session = Depends(get_session)):
         self.session = session
 
-    def get_user_by_email(
+
+    async def get_user_by_email(
             self,
             email: str
     ):
-        user = self.session.query(tables.User).filter(tables.User.email == email).first()
+        stmt = select(tables.User).filter(tables.User.email == email)
+        result = await self.session.execute(stmt)
+        user = result.scalars().first()
         return user
 
-    def update_user(
+
+    async def update_user(
             self,
             user: tables.User,
             user_data: dict
@@ -36,11 +41,12 @@ class OwnerService():
         for k, v in user_data.items():
             setattr(user, k, v)
 
-        self.session.commit()
+        await self.session.commit()
         return user
 
-    def get_profile(self, email):
-        user = self.get_user_by_email(email)
+
+    async def get_profile(self, email):
+        user = await self.get_user_by_email(email)
         if not user:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
@@ -51,8 +57,12 @@ class OwnerService():
             )
         return user
 
-    def get_users(self):
-        users = self.session.query(tables.User).all()
+
+    async def get_users(self):
+        stmt = select(tables.User)
+        result = await self.session.execute(stmt)
+        users = result.scalars().all()
+
         if not users:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
@@ -63,7 +73,8 @@ class OwnerService():
             )
         return users
  
-    def set_role(self, data: SetRoleModel):
+
+    async def set_role(self, data: SetRoleModel):
         if data.owner_password != settings.OWNER_PASSWORD:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
@@ -72,12 +83,13 @@ class OwnerService():
                     'WWW-Authenticate': 'Bearer'
                 },
             )
-        user = self.get_user_by_email(data.email)
-        self.update_user(user, {"role": data.role})
+        user = await self.get_user_by_email(data.email)
+        await self.update_user(user, {"role": data.role})
         return user
 
-    def delete_user(self, email):
-        user = self.get_user_by_email(email)
+
+    async def delete_user(self, email):
+        user = await self.get_user_by_email(email)
         if not user:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
@@ -86,8 +98,8 @@ class OwnerService():
                     'WWW-Authenticate': 'Bearer'
                 },
             )
-        self.session.delete(user)
-        self.session.commit()
+        await self.session.delete(user)
+        await self.session.commit()
         return
 
     

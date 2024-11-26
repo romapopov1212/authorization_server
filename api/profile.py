@@ -11,22 +11,23 @@ router = APIRouter(
 )
 
 @router.get('/', response_model = ProfileOut)
-def _get_profile(
+async def get_profile(
     current_user: str = Depends(TokenService.get_current_user),
     service : ProfileService = Depends()
 ):
-    return service.get_profile(current_user)
+    user = await service.get_user_by_id(current_user)
+    return ProfileOut(username=user.username, email=user.email)
 
 @router.patch('/change-password')
-def _change_password(
+async def change_password(
     data:  ToChangePassword,
     current_user: str = Depends(TokenService.get_current_user),
     service : ProfileService = Depends()
 ):
-    service.change_password(current_user, data)
+    await service.change_password(current_user, data)
 
 @router.patch('/change-email')
-async def _change_email(
+async def change_email(
     data: ToChangeEmail,
     current_user: str = Depends(TokenService.get_current_user),
     service : ProfileService = Depends()
@@ -34,10 +35,10 @@ async def _change_email(
     await service.change_email(current_user, data)
 
 @router.patch('/change-username')
-def _change_username(
+async def change_username(
     data: ToChangeUsername,
     current_user: str = Depends(TokenService.get_current_user),
     service : ProfileService = Depends()
 ):
-    service.change_username(current_user, data)
+    await service.change_username(current_user, data)
 

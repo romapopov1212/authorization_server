@@ -29,11 +29,11 @@ async def sign_up(
 
 
 @router.post('/sign-in', response_model=Token)
-def sign_in(
+async def sign_in(
         form_data: Annotated[OAuth2EmailPasswordRequestForm, Depends()],
         service: AuthService = Depends(),
 ) -> Token:
-    return service.authenticate_user(form_data.email, form_data.password)
+    return await service.authenticate_user(form_data.email, form_data.password)
 
 @router.post('/password-reset-request')
 async def password_reset_request(
@@ -44,24 +44,24 @@ async def password_reset_request(
 
 
 @router.post('/reset-password')
-def reset_password(
+async def reset_password(
         token,
         password: PasswordResetConfirmModel,
         service: AuthService = Depends(),
 ):
-    return service.reset_password(token, password)
+    return await service.reset_password(token, password)
 
 @router.get("/email-confirm")
-def email_confirm(
+async def email_confirm(
         token,
         service: AuthService = Depends(),
 ):
-    return service.verify_user_account(token)
+    return await service.verify_user_account(token)
 
 @router.get("/refresh_token")
-def get_new_refresh_token(
+async def get_new_refresh_token(
         token_detail: dict = Depends(RefreshTokenBearer()),
         service: AuthService = Depends(),
 ):
 
-    return service.get_new_refresh_token(token_detail)
+    return await service.get_new_refresh_token(token_detail)

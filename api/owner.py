@@ -10,34 +10,34 @@ router = APIRouter(
 )
 
 @router.patch("/set-role")
-def set_role(
+async def set_role(
     data: SetRoleModel,
     service: OwnerService = Depends(),
 ):
     owner_check(data.owner_password)
-    return service.set_role(data)
+    return await service.set_role(data)
 
 @router.get("/get-profile", response_model=ProfileOut)
-def get_profile(
+async def get_profile(
     owner_password: str,
     user_email: str,
     service: OwnerService = Depends(),
 ):  
     owner_check(owner_password)
-    return service.get_profile(user_email)
+    return await service.get_profile(user_email)
 
 @router.get("/get-profiles", response_model=list[ProfileOut])
-def get_profiles(
+async def get_profiles(
     owner_password: str,
     service: OwnerService = Depends(),
 ):
     owner_check(owner_password)
-    return service.get_users()
+    return await service.get_users()
 
 @router.delete("/delete-user")
-def delete_user(
+async def delete_user(
     data: OwnerGetProfile,
     service: OwnerService = Depends(),
 ):
     owner_check(data.owner_password)
-    return service.delete_user(data.email)
+    return await service.delete_user(data.email)

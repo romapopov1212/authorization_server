@@ -8,6 +8,7 @@ from fastapi import HTTPException
 from fastapi import status
 from fastapi.responses import JSONResponse
 from sqlalchemy import or_
+from sqlalchemy.future import select
 
 from utils import verify_token
 from database import get_session
@@ -32,12 +33,15 @@ class AuthService:
             self,
             user_data: UserRegistration
     ):
-        existing_user = self.session.query(tables.User).filter(
+        stmt = select(tables.User).filter(
             or_(
                 tables.User.email == user_data.email,
                 tables.User.username == user_data.username
             )
-        ).first()
+        )
+        
+        result = await self.session.execute(stmt)
+        existing_user = result.scalars().first()
 
         if existing_user:
             logger.error(f"User with this email: {user_data.email} or username: {user_data.username} already exists")
@@ -55,7 +59,7 @@ class AuthService:
             password_hash = self.hash_password(user_data.password)
         )
         self.session.add(user)
-        self.session.commit()
+        await self.session.commit()
         await send_email_to_confirm(user_data.email)
         logger.info(f"User with email: \"{user_data.email}\" and username \"{user_data.username}\" registered successfully")
         return JSONResponse(
@@ -84,16 +88,16 @@ class AuthService:
         )
 
 
-    def authenticate_user(
+    async def authenticate_user(
             self,
             user_email: str,
             password: str
     ) -> Token:
 
-        user = self.get_user_by_email(user_email)
+        user = await self.get_user_by_email(user_email)
         access_token_expires = timedelta(seconds=settings.jwt_expiration)
         if not user or not self.verify_passwords(password, user.password_hash):
-            logger.error(f"Unsuccessful login attempt for user {user.id}")
+            logger.error(f"Unsuccessful login attempt for user {user_email}")
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="Incorrect email or password",
@@ -112,25 +116,25 @@ class AuthService:
                 },
             )
 
-        if user is not None:
-            password_valid = self.verify_passwords(password, user.password_hash)
-            if password_valid:
-                access_token = self.token_service.create_access_token(
-                    data = {
-                        "sub" : str(user.id),
-                        "exp": access_token_expires
-                    }
-                )
-                refresh_token = self.token_service.create_access_token(
-                    data={
-                        "sub": str(user.id),
+        password_valid = self.verify_passwords(password, user.password_hash)
+        if password_valid:
+            access_token = self.token_service.create_access_token(
+                data = {
+                    "sub" : str(user.id),
+                    "exp": access_token_expires
+                }
+            )
+            refresh_token = self.token_service.create_access_token(
+                data={
+                    "sub": str(user.id),
 
-                    },
-                    expires_delta=timedelta(days=settings.refresh_token_expire),
-                    refresh = True,
-                )
-                logger.info(f"Successful login attempt for user {user.email}")
-                return Token(access_token=access_token, refresh_token=refresh_token)
+                },
+                expires_delta=timedelta(days=settings.refresh_token_expire),
+                refresh = True,
+            )
+            logger.info(f"Successful login attempt for user {user.email}")
+            return Token(access_token=access_token, refresh_token=refresh_token)
+
         logger.error(f"Unsuccessful login attempt for user {user.id}")
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -155,7 +159,7 @@ class AuthService:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail='Invalid or expired Token')
 
 
-    def update_user(
+    async def update_user(
             self,
             user: tables.User,
             user_data: dict
@@ -163,16 +167,17 @@ class AuthService:
         for k, v in user_data.items():
             setattr(user, k, v)
 
-        self.session.commit()
-
+        await self.session.commit()
         return user
 
 
-    def get_user_by_email(
+    async def get_user_by_email(
             self,
             email: str
     ):
-        user = self.session.query(tables.User).filter(tables.User.email == email).first()
+        stmt = select(tables.User).filter(tables.User.email == email)
+        result = await self.session.execute(stmt)
+        user = result.scalars().first()
         return user
 
 
@@ -183,7 +188,7 @@ class AuthService:
         return ph.hash(password)
 
 
-    def verify_user_account(self, token: str):
+    async def verify_user_account(self, token: str):
         token_data = decode_url_safe_token(token)
         if not token_data:
             logger.error("Token decoding failed")
@@ -193,7 +198,7 @@ class AuthService:
             )
         user_email = token_data.get("email")
         if user_email:
-            user = self.get_user_by_email(user_email)
+            user = await self.get_user_by_email(user_email)
 
             if not user:
                 logger.error(f"Unsuccessful confirm email for user: {user.id}")
@@ -205,7 +210,7 @@ class AuthService:
                     },
                 )
 
-            self.update_user(user, {"is_active": True})
+            await self.update_user(user, {"is_active": True})
             logger.info(f"Account verified successfully for user {user.id}")
             return JSONResponse(
                 content={"message": "Account verified successfully"},
@@ -219,7 +224,7 @@ class AuthService:
 
 
 
-    def reset_password(
+    async def reset_password(
             self,
             token: str,
             password: PasswordResetConfirmModel,
@@ -242,14 +247,14 @@ class AuthService:
         user_email = token_data.get("email")
 
         if user_email:
-            user = self.get_user_by_email(user_email)
+            user = await self.get_user_by_email(user_email)
             if not user:
                 logger.warning(f"Unsuccessful reset password for user {user.email}")
                 raise HTTPException(
                     status_code=status.HTTP_401_UNAUTHORIZED,
                 )
             passwd_hash = self.hash_password(new_password)
-            self.update_user(user, {"password_hash": passwd_hash})
+            await self.update_user(user, {"password_hash": passwd_hash})
             logger.info(f"Successful reset password for user {user.email}")
             return JSONResponse(
                 content={"message": "Password reset Successfully"},

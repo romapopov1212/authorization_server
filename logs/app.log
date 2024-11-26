@@ -150,3 +150,35 @@
 2024-11-24 23:02:25.718 | INFO     | services.auth:verify_user_account:208 - Account verified successfully for user 10
 2024-11-24 23:06:45.033 | INFO     | services.auth:register:60 - User with email: "popovroma054@gmail.com" and username "1234" registered successfully
 2024-11-24 23:07:05.462 | INFO     | services.auth:verify_user_account:209 - Account verified successfully for user 11
+2024-11-26 02:18:52.766 | ERROR    | services.auth:register:45 - User with this email: tutikosnov@gmail.com or username: Тутик Николай Алексеевич already exists
+2024-11-26 02:19:38.806 | ERROR    | services.auth:register:45 - User with this email: tutikosnov@gmail.com or username: Тутик Николай Алексеевич already exists
+2024-11-26 02:21:48.814 | INFO     | services.auth:register:64 - User with email: "tutikosnov@gmail.com" and username "Тутик Николай Алексеевич" registered successfully
+2024-11-26 02:44:56.613 | INFO     | services.auth:verify_user_account:215 - Account verified successfully for user 1
+2024-11-26 02:45:25.418 | INFO     | services.auth:authenticate_user:135 - Successful login attempt for user tutikosnov@gmail.com
+2024-11-26 02:45:47.672 | INFO     | services.token:get_current_user:64 - User ID: 1
+2024-11-26 02:54:32.851 | INFO     | services.token:get_current_user:64 - User ID: 1
+2024-11-26 02:56:40.870 | INFO     | services.token:get_current_user:64 - User ID: 1
+2024-11-26 02:59:07.587 | INFO     | services.auth:authenticate_user:135 - Successful login attempt for user tutikosnov@gmail.com
+2024-11-26 02:59:38.272 | INFO     | services.token:get_current_user:64 - User ID: 1
+2024-11-26 03:20:06.446 | ERROR    | services.token:get_current_user:53 - Token expired
+2024-11-26 03:20:23.827 | INFO     | services.auth:authenticate_user:135 - Successful login attempt for user tutikosnov@gmail.com
+2024-11-26 03:20:37.617 | INFO     | services.token:get_current_user:64 - User ID: 1
+2024-11-26 03:37:00.678 | INFO     | services.auth:authenticate_user:135 - Successful login attempt for user tutikosnov@gmail.com
+2024-11-26 03:37:14.147 | INFO     | services.token:get_current_user:64 - User ID: 1
+2024-11-26 03:37:48.689 | INFO     | services.token:get_current_user:64 - User ID: 1
+2024-11-26 03:38:05.540 | INFO     | services.auth:authenticate_user:135 - Successful login attempt for user tutikosnov@gmail.com
+2024-11-26 03:39:29.899 | INFO     | services.auth:authenticate_user:135 - Successful login attempt for user tutikosnov@gmail.com
+2024-11-26 03:39:47.617 | INFO     | services.token:get_current_user:64 - User ID: 1
+2024-11-26 03:39:54.273 | INFO     | services.token:get_current_user:64 - User ID: 1
+2024-11-26 03:40:04.599 | ERROR    | services.auth:authenticate_user:100 - Unsuccessful login attempt for user 1
+2024-11-26 03:40:15.522 | INFO     | services.auth:authenticate_user:135 - Successful login attempt for user tutikosnov@gmail.com
+2024-11-26 03:40:29.590 | INFO     | services.token:get_current_user:64 - User ID: 1
+2024-11-26 03:40:49.185 | INFO     | services.token:get_current_user:64 - User ID: 1
+2024-11-26 03:41:43.136 | INFO     | services.token:get_current_user:64 - User ID: 1
+2024-11-26 03:41:48.410 | INFO     | services.token:get_current_user:64 - User ID: 1
+2024-11-26 03:42:23.352 | INFO     | services.token:get_current_user:64 - User ID: 1
+2024-11-26 03:42:26.499 | INFO     | services.profile:change_email:58 - Successful request to confirm email nikolaj.tutik@mail.ru
+2024-11-26 03:42:51.520 | INFO     | services.auth:verify_user_account:214 - Account verified successfully for user 1
+2024-11-26 03:45:36.086 | ERROR    | services.auth:authenticate_user:100 - Unsuccessful login attempt for user tutikosnov@gmail.com
+2024-11-26 03:46:06.420 | INFO     | services.auth:authenticate_user:135 - Successful login attempt for user nikolaj.tutik@mail.ru
+2024-11-26 03:46:26.744 | INFO     | services.token:get_current_user:64 - User ID: 1
