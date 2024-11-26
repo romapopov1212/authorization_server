@@ -1,13 +1,7 @@
-
 from typing import Annotated
 
-from fastapi.responses import JSONResponse
 from fastapi import APIRouter
 from fastapi import Depends
-from fastapi import HTTPException
-from fastapi import status
-
-from datetime import datetime, timedelta
 
 from models.auth import Token, PasswordResetConfirmModel
 from models.auth import UserRegistration
@@ -15,7 +9,8 @@ from services.auth import AuthService
 from models.auth import PasswordResetRequestModel
 from models.auth import OAuth2EmailPasswordRequestForm
 from services.token import RefreshTokenBearer
-from services.token import TokenService
+
+
 router = APIRouter(
     prefix='/auth'
 )
@@ -35,6 +30,7 @@ async def sign_in(
 ) -> Token:
     return await service.authenticate_user(form_data.email, form_data.password)
 
+
 @router.post('/password-reset-request')
 async def password_reset_request(
         email_data:PasswordResetRequestModel,
@@ -51,12 +47,14 @@ async def reset_password(
 ):
     return await service.reset_password(token, password)
 
+
 @router.get("/email-confirm")
 async def email_confirm(
         token,
         service: AuthService = Depends(),
 ):
     return await service.verify_user_account(token)
+
 
 @router.get("/refresh_token")
 async def get_new_refresh_token(

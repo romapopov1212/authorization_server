@@ -1,17 +1,14 @@
-import uuid
 from datetime import datetime, timedelta, timezone
 
 import jwt
-import logging
-
 from sqlalchemy.orm import Session
-from fastapi import HTTPException, Depends, status, Request
+from fastapi import HTTPException, Depends, status
 from fastapi.security import HTTPBearer
-
 
 from database import get_session
 from settings import settings
 from logger import logger
+
 
 http_bearer = HTTPBearer(auto_error=False)
 
@@ -35,7 +32,7 @@ class TokenService:
             payload = jwt.decode(token, key=settings.jwt_secret, algorithms=settings.jwt_algorithm)
             user_id: str = payload.get("sub")
             if user_id is None:
-                logger.error(f"No user id provided")
+                logger.error("No user id provided")
                 raise HTTPException(
                     status_code=status.HTTP_401_UNAUTHORIZED,
                     detail="Invalid token",
@@ -43,20 +40,20 @@ class TokenService:
 
             issuer = payload.get("iss")
             if issuer != settings.jwt_issuer:
-                logger.error(f"Invalid issuer")
+                logger.error("Invalid issuer")
                 raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                     detail="Invalid token",
                 )
 
         except jwt.ExpiredSignatureError:
-            logger.error(f"Token expired")
+            logger.error("Token expired")
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="Token has expired",
             )
         except jwt.PyJWTError:
-            logger.error(f"Invalid token")
+            logger.error("Invalid token")
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="Invalid token",
@@ -88,7 +85,7 @@ class TokenService:
             token_data = jwt.decode(token, key=settings.jwt_secret, algorithms=[settings.jwt_algorithm])
             return token_data
         except jwt.PyJWTError as e:
-            logging.exception(e)
+            logger.error(f"Token decoding failed: {str(e)}")
             return None
 
 

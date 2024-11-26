@@ -20,6 +20,7 @@ from logger import logger
 from utils import decode_url_safe_token, create_url_safe_token
 from celery_tasks import send_email_to_confirm, send_email
 
+
 ph = PasswordHasher()
 
 class AuthService:
@@ -65,26 +66,6 @@ class AuthService:
         return JSONResponse(
             status_code=status.HTTP_201_CREATED,
             content={"message": "User registered successfully", "user": user_data.__dict__}
-        )
-
-
-    async def password_reset_request(
-            self,
-            email_data:PasswordResetRequestModel,
-    ):
-        email = email_data.email
-        token = create_url_safe_token({"email": email})
-        verify_token(token, expires_in=900)
-        link = f"http://127.0.0.1:8000/auth/reset-password?token={token}"
-        html_message = f'Инструкция для сброса пароля: <p>{link}</p>'
-        subject = "Reset Your Password"
-        await send_email([email], subject, html_message)
-        logger.info(f"Successful request for change password {email}")
-        return JSONResponse(
-            content={
-                "message": "На вашу почту отправлена инструкция для сброса пароля",
-            },
-            status_code=status.HTTP_200_OK,
         )
 
 
@@ -142,6 +123,104 @@ class AuthService:
         )
 
 
+    async def password_reset_request(
+            self,
+            email_data:PasswordResetRequestModel,
+    ):
+        email = email_data.email
+        token = create_url_safe_token({"email": email})
+        verify_token(token, expires_in=900)
+        link = f"http://127.0.0.1:8000/auth/reset-password?token={token}"
+        html_message = f'Инструкция для сброса пароля: <p>{link}</p>'
+        subject = "Reset Your Password"
+        await send_email([email], subject, html_message)
+        logger.info(f"Successful request for change password {email}")
+        return JSONResponse(
+            content={
+                "message": "На вашу почту отправлена инструкция для сброса пароля",
+            },
+            status_code=status.HTTP_200_OK,
+        )
+
+
+    async def reset_password(
+            self,
+            token: str,
+            password: PasswordResetConfirmModel,
+    ):
+        new_password = password.new_password
+        confirm_password = password.confirm_new_password
+        if new_password != confirm_password:
+            logger.warning("Unsuccessful reset password for user")
+            raise HTTPException(
+                detail="Passwords don't match",
+                status_code=status.HTTP_400_BAD_REQUEST,
+            )
+        token_data = decode_url_safe_token(token)
+        if not token_data:
+            logger.error("Token decoding failed")
+            return JSONResponse(
+                content={"message": "Invalid or expired token"},
+                status_code=status.HTTP_400_BAD_REQUEST,
+            )
+        user_email = token_data.get("email")
+
+        if user_email:
+            user = await self.get_user_by_email(user_email)
+            if not user:
+                logger.warning(f"Unsuccessful reset password for user {user.email}")
+                raise HTTPException(
+                    status_code=status.HTTP_401_UNAUTHORIZED,
+                )
+            passwd_hash = self.hash_password(new_password)
+            await self.update_user(user, {"password_hash": passwd_hash})
+            logger.info(f"Successful reset password for user {user.email}")
+            return JSONResponse(
+                content={"message": "Password reset Successfully"},
+                status_code=status.HTTP_200_OK,
+            )
+        logger.warning(f"Unsuccessful reset password {user_email}")
+        return JSONResponse(
+            content={"message": "Error occured during password reset."},
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+        )
+
+
+    async def verify_user_account(self, token: str):
+        token_data = decode_url_safe_token(token)
+        if not token_data:
+            logger.error("Token decoding failed")
+            return JSONResponse(
+                content={"message": "Invalid or expired token"},
+                status_code=status.HTTP_400_BAD_REQUEST,
+            )
+        user_email = token_data.get("email")
+        if user_email:
+            user = await self.get_user_by_email(user_email)
+
+            if not user:
+                logger.error(f"Unsuccessful confirm email for user: {user.id}")
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail="Incorrect email",
+                    headers={
+                        'WWW-Authenticate': 'Bearer'
+                    },
+                )
+
+            await self.update_user(user, {"is_active": True})
+            logger.info(f"Account verified successfully for user {user.id}")
+            return JSONResponse(
+                content={"message": "Account verified successfully"},
+                status_code=status.HTTP_200_OK,
+            )
+        logger.error(f"Unsuccessful confirm email for user: {user_email}")
+        return JSONResponse(
+            content={"message": "Error occured during verification"},
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+        )
+
+
     def get_new_refresh_token(
             self,
             token_detail: dict = Depends(RefreshTokenBearer()),
@@ -186,85 +265,6 @@ class AuthService:
             password: str
     ) -> str:
         return ph.hash(password)
-
-
-    async def verify_user_account(self, token: str):
-        token_data = decode_url_safe_token(token)
-        if not token_data:
-            logger.error("Token decoding failed")
-            return JSONResponse(
-                content={"message": "Invalid or expired token"},
-                status_code=status.HTTP_400_BAD_REQUEST,
-            )
-        user_email = token_data.get("email")
-        if user_email:
-            user = await self.get_user_by_email(user_email)
-
-            if not user:
-                logger.error(f"Unsuccessful confirm email for user: {user.id}")
-                raise HTTPException(
-                    status_code=status.HTTP_400_BAD_REQUEST,
-                    detail="Incorrect email",
-                    headers={
-                        'WWW-Authenticate': 'Bearer'
-                    },
-                )
-
-            await self.update_user(user, {"is_active": True})
-            logger.info(f"Account verified successfully for user {user.id}")
-            return JSONResponse(
-                content={"message": "Account verified successfully"},
-                status_code=status.HTTP_200_OK,
-            )
-        logger.error(f"Unsuccessful confirm email for user: {user_email}")
-        return JSONResponse(
-            content={"message": "Error occured during verification"},
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-        )
-
-
-
-    async def reset_password(
-            self,
-            token: str,
-            password: PasswordResetConfirmModel,
-    ):
-        new_password = password.new_password
-        confirm_password = password.confirm_new_password
-        if new_password != confirm_password:
-            logger.warning(f"Unsuccessful reset password for user")
-            raise HTTPException(
-                detail="Passwords don't match",
-                status_code=status.HTTP_400_BAD_REQUEST,
-            )
-        token_data = decode_url_safe_token(token)
-        if not token_data:
-            logger.error("Token decoding failed")
-            return JSONResponse(
-                content={"message": "Invalid or expired token"},
-                status_code=status.HTTP_400_BAD_REQUEST,
-            )
-        user_email = token_data.get("email")
-
-        if user_email:
-            user = await self.get_user_by_email(user_email)
-            if not user:
-                logger.warning(f"Unsuccessful reset password for user {user.email}")
-                raise HTTPException(
-                    status_code=status.HTTP_401_UNAUTHORIZED,
-                )
-            passwd_hash = self.hash_password(new_password)
-            await self.update_user(user, {"password_hash": passwd_hash})
-            logger.info(f"Successful reset password for user {user.email}")
-            return JSONResponse(
-                content={"message": "Password reset Successfully"},
-                status_code=status.HTTP_200_OK,
-            )
-        logger.warning(f"Unsuccessful reset password {user_email}")
-        return JSONResponse(
-            content={"message": "Error occured during password reset."},
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-        )
 
 
     def verify_passwords(self, plain_password, hashed_password):

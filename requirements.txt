@@ -20,3 +20,4 @@ pydantic-settings
 loguru
 itsdangerous
 fastapi-mail
+qrcode

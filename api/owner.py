@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 from fastapi import Depends
 
-from models.owner import ProfileOut, SetRoleModel, OwnerGetProfile, OwnerRequest
+from models.owner import ProfileOut, SetRoleModel, OwnerGetProfile
 from services.owner import OwnerService, owner_check
 
 
@@ -17,6 +17,7 @@ async def set_role(
     owner_check(data.owner_password)
     return await service.set_role(data)
 
+
 @router.get("/get-profile", response_model=ProfileOut)
 async def get_profile(
     owner_password: str,
@@ -24,7 +25,8 @@ async def get_profile(
     service: OwnerService = Depends(),
 ):  
     owner_check(owner_password)
-    return await service.get_profile(user_email)
+    return await service.get_user_by_email(user_email)
+
 
 @router.get("/get-profiles", response_model=list[ProfileOut])
 async def get_profiles(
@@ -33,6 +35,7 @@ async def get_profiles(
 ):
     owner_check(owner_password)
     return await service.get_users()
+
 
 @router.delete("/delete-user")
 async def delete_user(

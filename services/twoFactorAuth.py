@@ -10,9 +10,11 @@ from fastapi.responses import JSONResponse
 from fastapi import status
 
 class TwoFactorAuthService:
+
     def __init__(self, session: Session = Depends(get_session), token_service: TS = Depends()):
         self.session = session
         self.token_service = token_service
+
 
     def enable_otp(self, user_data: UserTwoFa, ):
         if user_data.is_2fa is False:

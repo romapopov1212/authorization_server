@@ -18,6 +18,7 @@ async def get_profile(
     user = await service.get_user_by_id(current_user)
     return ProfileOut(username=user.username, email=user.email)
 
+
 @router.patch('/change-password')
 async def change_password(
     data:  ToChangePassword,
@@ -26,6 +27,7 @@ async def change_password(
 ):
     await service.change_password(current_user, data)
 
+
 @router.patch('/change-email')
 async def change_email(
     data: ToChangeEmail,
@@ -33,6 +35,7 @@ async def change_email(
     service : ProfileService = Depends()
 ):
     await service.change_email(current_user, data)
+
 
 @router.patch('/change-username')
 async def change_username(

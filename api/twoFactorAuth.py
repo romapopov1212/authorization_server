@@ -4,7 +4,11 @@ from services.token import TokenService
 from models.auth import UserTwoFa
 from services.profile import ProfileService
 from services.twoFactorAuth import TwoFactorAuthService
+
+
 router = APIRouter()
+
+
 @router.post("/enable_twoFactorAuth")
 def enable_topt(
         current_user: str = Depends(TokenService.get_current_user),
