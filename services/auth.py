@@ -7,7 +7,6 @@ from sqlalchemy.orm import Session
 from fastapi import HTTPException
 from fastapi import status
 from fastapi.responses import JSONResponse
-from sqlalchemy import or_
 from sqlalchemy.future import select
 
 from utils import verify_token
