@@ -45,7 +45,12 @@ class AuthService:
         existing_user = result.scalars().first()
 
         if existing_user:
-            logger.error(f"User with this email: {user_data.email} or username: {user_data.username} already exists")
+            logger.error({
+                "action": "register",
+                "status": "failed",
+                "user_data": f"email: {user_data.email}, username: {user_data.username}",
+                "message": "User with this email or username already exists"
+            })
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="User with this email or username already exists",
@@ -62,7 +67,12 @@ class AuthService:
         self.session.add(user)
         await self.session.commit()
         await send_email_to_confirm(user_data.email)
-        logger.info(f"User with email: \"{user_data.email}\" and username \"{user_data.username}\" registered successfully")
+        logger.info({
+            "action": "register",
+            "status": "success",
+            "user_data": f"email: {user_data.email}",
+            "message": "User registered successfully"
+        })
         return JSONResponse(
             status_code=status.HTTP_201_CREATED,
             content={"message": "User registered successfully", "user": user_data.__dict__}
@@ -78,7 +88,12 @@ class AuthService:
         user = await self.get_user_by_email(user_email)
         access_token_expires = timedelta(seconds=settings.jwt_expiration)
         if not user or not self.verify_passwords(password, user.password_hash):
-            logger.error(f"Unsuccessful login attempt for user {user_email}")
+            logger.warning({
+                "action": "login",
+                "status": "failed",
+                "user_data": f"email: {user_email}",
+                "message": "Incorrect email or password"
+            })
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="Incorrect email or password",
@@ -88,7 +103,13 @@ class AuthService:
             )
 
         if not user.is_active:
-            logger.error(f"Unsuccessful login attempt for user {user.id}. Account is not confirmed")
+            logger.error({
+                "action": "login",
+                "status": "failed",
+                "user_data": f"email: {user_email}",
+                "message": "Account is not confirmed"
+
+            })
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="Account is not confirmed",
@@ -113,10 +134,20 @@ class AuthService:
                 expires_delta=timedelta(days=settings.refresh_token_expire),
                 refresh = True,
             )
-            logger.info(f"Successful login attempt for user {user.email}")
+            logger.info({
+                "action": "login",
+                "status": "success",
+                "user_data": f"email: {user_email}",
+                "message": "User logged in successfully"
+            })
             return Token(access_token=access_token, refresh_token=refresh_token)
 
-        logger.error(f"Unsuccessful login attempt for user {user.id}")
+        logger.error({
+            "action": "login",
+            "status": "failed",
+            "user_data": f"email: {user_email}",
+            "message": "Incorrect email or password"
+        })
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Incorrect username or password",
@@ -134,7 +165,12 @@ class AuthService:
         html_message = f'Инструкция для сброса пароля: <p>{link}</p>'
         subject = "Reset Your Password"
         await send_email([email], subject, html_message)
-        logger.info(f"Successful request for change password {email}")
+        logger.info({
+            "action": "password_reset_request",
+            "status": "success",
+            "user_data": f"email: {email}",
+            "message": f"Reset password message sent successfully to {email}"
+        })
         return JSONResponse(
             content={
                 "message": "На вашу почту отправлена инструкция для сброса пароля",
@@ -151,14 +187,18 @@ class AuthService:
         new_password = password.new_password
         confirm_password = password.confirm_new_password
         if new_password != confirm_password:
-            logger.warning("Unsuccessful reset password for user")
             raise HTTPException(
                 detail="Passwords don't match",
                 status_code=status.HTTP_400_BAD_REQUEST,
             )
         token_data = decode_url_safe_token(token)
         if not token_data:
-            logger.error("Token decoding failed")
+            logger.error({
+                "action": "reset_password",
+                "status": "failed",
+                "data": f"token: {token}",
+                "message": "Invalid or expired token"
+            })
             return JSONResponse(
                 content={"message": "Invalid or expired token"},
                 status_code=status.HTTP_400_BAD_REQUEST,
@@ -168,18 +208,33 @@ class AuthService:
         if user_email:
             user = await self.get_user_by_email(user_email)
             if not user:
-                logger.warning(f"Unsuccessful reset password for user {user.email}")
+                logger.warning({
+                    "action": "reset_password",
+                    "status": "failed",
+                    "user_data": f"email: {user_email}",
+                    "message": "User not found"
+                })
                 raise HTTPException(
                     status_code=status.HTTP_401_UNAUTHORIZED,
                 )
             passwd_hash = self.hash_password(new_password)
             await self.update_user(user, {"password_hash": passwd_hash})
-            logger.info(f"Successful reset password for user {user.email}")
+            logger.info({
+                "action": "reset_password",
+                "status": "success",
+                "user_data": f"email: {user_email}",
+                "message": "Password reset Successfully"
+            })
             return JSONResponse(
                 content={"message": "Password reset Successfully"},
                 status_code=status.HTTP_200_OK,
             )
-        logger.warning(f"Unsuccessful reset password {user_email}")
+        logger.warning({
+            "action": "reset_password",
+            "status": "failed",
+            "user_data": f"email: {user_email}",
+            "message": "Error occured during password reset."
+        })
         return JSONResponse(
             content={"message": "Error occured during password reset."},
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -189,7 +244,12 @@ class AuthService:
     async def verify_user_account(self, token: str):
         token_data = decode_url_safe_token(token)
         if not token_data:
-            logger.error("Token decoding failed")
+            logger.error({
+                "action": "verify_user_account",
+                "status": "failed",
+                "data": f"token: {token}",
+                "message": "Invalid or expired token"
+            })
             return JSONResponse(
                 content={"message": "Invalid or expired token"},
                 status_code=status.HTTP_400_BAD_REQUEST,
@@ -197,9 +257,13 @@ class AuthService:
         user_email = token_data.get("email")
         if user_email:
             user = await self.get_user_by_email(user_email)
-
             if not user:
-                logger.error(f"Unsuccessful confirm email for user: {user.id}")
+                logger.error({
+                    "action": "verify_user_account",
+                    "status": "failed",
+                    "user_data": f"email: {user_email}",
+                    "message": "User not found"
+                })
                 raise HTTPException(
                     status_code=status.HTTP_400_BAD_REQUEST,
                     detail="Incorrect email",
@@ -209,12 +273,22 @@ class AuthService:
                 )
 
             await self.update_user(user, {"is_active": True})
-            logger.info(f"Account verified successfully for user {user.id}")
+            logger.info({
+                "action": "verify_user_account",
+                "status": "success",
+                "user_data": f"email: {user_email}",
+                "message": "Account verified successfully"
+            })
             return JSONResponse(
                 content={"message": "Account verified successfully"},
                 status_code=status.HTTP_200_OK,
             )
-        logger.error(f"Unsuccessful confirm email for user: {user_email}")
+        logger.error({
+            "action": "verify_user_account",
+            "status": "failed",
+            "user_data": f"email: {user_email}",
+            "message": "Error occured during verification"
+        })
         return JSONResponse(
             content={"message": "Error occured during verification"},
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,

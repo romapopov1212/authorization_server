@@ -22,3 +22,4 @@ class ProfileOut(BaseModel):
     email: str
     role: str
     is_active: bool
+    is_2fa: bool

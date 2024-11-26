@@ -21,7 +21,12 @@ class TokenService:
     @staticmethod
     def get_current_user(credentials=Depends(http_bearer)):
         if not credentials:
-            logger.error("No credentials provided")
+            logger.error({
+                "action": "get_current_user",
+                "status": "failed",
+                "token": f"{credentials}",
+                "message": "Invalid token"
+            })
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="Not authenticated",
@@ -32,7 +37,12 @@ class TokenService:
             payload = jwt.decode(token, key=settings.jwt_secret, algorithms=settings.jwt_algorithm)
             user_id: str = payload.get("sub")
             if user_id is None:
-                logger.error("No user id provided")
+                logger.error({
+                    "action": "get_current_user",
+                    "status": "failed",
+                    "token": f"{token}",
+                    "message": "No user ID in token"
+                })
                 raise HTTPException(
                     status_code=status.HTTP_401_UNAUTHORIZED,
                     detail="Invalid token",
@@ -40,25 +50,39 @@ class TokenService:
 
             issuer = payload.get("iss")
             if issuer != settings.jwt_issuer:
-                logger.error("Invalid issuer")
+                logger.error({
+                    "action": "get_current_user",
+                    "status": "failed",
+                    "token": f"{token}",
+                    "message": "Invalid issuer in token"
+                })
                 raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                     detail="Invalid token",
                 )
 
         except jwt.ExpiredSignatureError:
-            logger.error("Token expired")
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="Token has expired",
             )
         except jwt.PyJWTError:
-            logger.error("Invalid token")
+            logger.error({
+                "action": "get_current_user",
+                "status": "failed",
+                "token": f"{token}",
+                "message": "Invalid token"
+            })
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="Invalid token",
             )
-        logger.info(f"User ID: {user_id}")
+        logger.info({
+            "action": "get_current_user",
+            "status": "success",
+            "user_id": f"{user_id}",
+            "message": "User authenticated"
+        })
         return user_id
 
 
@@ -85,14 +109,24 @@ class TokenService:
             token_data = jwt.decode(token, key=settings.jwt_secret, algorithms=[settings.jwt_algorithm])
             return token_data
         except jwt.PyJWTError as e:
-            logger.error(f"Token decoding failed: {str(e)}")
+            logger.error({
+                "action": "decode_token",
+                "status": "failed",
+                "token": f"{token}",
+                "message": f"Error decoding token: {e}"
+            })
             return None
 
 
 class AccessTokenBearer(TokenService):
     def verify_token(self, token_data: dict) -> None:
         if token_data and token_data['refresh']:
-            logger.error("Not a access token provided")
+            logger.error({
+                "action": "verify_token",
+                "status": "failed",
+                "token": f"{token_data}",
+                "message": "Refresh token should be access token"
+            })
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
                 detail="Please provide an access token",
@@ -102,7 +136,12 @@ class AccessTokenBearer(TokenService):
 class RefreshTokenBearer(TokenService):
     def __call__(self, credentials=Depends(http_bearer)) -> dict:
         if not credentials:
-            logger.error("No authenticated")
+            logger.error({
+                "action": "get_current_user",
+                "status": "failed",
+                "token": f"{credentials}",
+                "message": "Invalid token"
+            })
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="Not authenticated",
@@ -116,7 +155,12 @@ class RefreshTokenBearer(TokenService):
 
     def verify_token(self, token_data: dict) -> None:
         if token_data and not token_data.get('refresh'):
-            logger.error("Not a refresh token provided")
+            logger.error({
+                "action": "verify_token",
+                "status": "failed",
+                "token": f"{token_data}",
+                "message": "Access token should be a refresh token"
+            })
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
                 detail="Please provide a refresh token",

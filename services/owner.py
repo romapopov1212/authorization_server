@@ -6,9 +6,15 @@ from db import tables
 from database import get_session
 from settings import settings
 from models.owner import SetRoleModel
+from logger import logger
 
 def owner_check(password):
     if password != settings.OWNER_PASSWORD:
+        logger.warning({
+            "action": "owner_check",
+            "status": "failed",
+            "message": "Incorrect password"
+        })
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Incorrect password",
@@ -24,16 +30,14 @@ class OwnerService():
 
 
     async def set_role(self, data: SetRoleModel):
-        if data.owner_password != settings.OWNER_PASSWORD:
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Incorrect password",
-                headers={
-                    'WWW-Authenticate': 'Bearer'
-                },
-            )
         user = await self.get_user_by_email(data.email)
         await self.update_user(user, {"role": data.role})
+        logger.info({
+            "action": "set_role",
+            "status": "success",
+            "user_data": f"user_email: {data.email}, user_role: {data.role}",
+            "message": "Role changed successfully"
+        })
         return user
 
 
@@ -46,6 +50,12 @@ class OwnerService():
         user = result.scalars().first()
 
         if not user:
+            logger.error({
+                "action": "get_user_by_email",
+                "status": "failed",
+                "user_data": f"email: {email}",
+                "message": "User not found"
+            })
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
                 detail="User not found",
@@ -62,6 +72,11 @@ class OwnerService():
         users = result.scalars().all()
 
         if not users:
+            logger.info({
+                "action": "get_users",
+                "status": "success",
+                "message": "Users table is empty"
+            })
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
                 detail="Users not found",
@@ -77,6 +92,12 @@ class OwnerService():
 
         await self.session.delete(user)
         await self.session.commit()
+        logger.info({
+            "action": "delete_user",
+            "status": "success",
+            "user_data": f"user_email: {email}",
+            "message": "User deleted successfully"
+        })
         return
 
 

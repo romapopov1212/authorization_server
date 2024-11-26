@@ -30,7 +30,12 @@ class ProfileService:
     async def change_password(self, user_id, data):
         user = await self.get_user_by_id(user_id)
         if not self.verify_passwords(data.password, user.password_hash):
-            logger.warning(f"Unsuccessful attempt to change password by user with user id: {user_id}. Incorrect password")
+            logger.warning({
+                "action": "change_password",
+                "status": "failed",
+                "user_data": f"user_email: {user.email}",
+                "message": "Incorrect password"
+            })
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="Incorrect password",
@@ -47,7 +52,12 @@ class ProfileService:
         existing_user = await self.get_user_by_email(data.new_email)
 
         if existing_user:
-            logger.error("Unsuccessful attempt to change email by user with user id: {user_id}. User with this email: {data.new_email} already exists")
+            logger.error({
+                "action": "change_email",
+                "status": "failed",
+                "user_data": f"user_email: {data.new_email}",
+                "message": "User with this email already exists"
+            })
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="User with this email already exists",
@@ -58,7 +68,12 @@ class ProfileService:
 
         user = await self.get_user_by_id(user_id)
         if not self.verify_passwords(data.password, user.password_hash):
-            logger.error(f"Incorrect password for user {user_id}")
+            logger.error({
+                "action": "change_email",
+                "status": "failed",
+                "user_data": f"user_email: {user.email}",
+                "message": "Incorrect password"
+            })
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="Incorrect password",
@@ -66,12 +81,25 @@ class ProfileService:
                     'WWW-Authenticate': 'Bearer'
                 },
             )
+        previous_email = user.email
         user.email = data.new_email
         user.is_active = False
         await self.session.commit()
+
+        logger.info({
+            "action": "change_email",
+            "status": "success",
+            "user_data": f"user_old_email: {previous_email}, user_new_email: {data.new_email}",
+            "message": "Email changed successfully"
+        })
         
         await send_email_to_confirm(data.new_email)
-        logger.info(f"Successful request to confirm email {user.email}")
+        logger.info({
+            "action": "change_email",
+            "status": "success",
+            "user_data": f"user_email: {data.new_email}",
+            "message": "Confirmation (email) message sent successfully to {data.new_email}"
+        })
         return JSONResponse(
             content={
                 "message": "На вашу почту отправлена инструкция для подтверждения почты",
@@ -84,7 +112,12 @@ class ProfileService:
         existing_user = await self.get_user_by_username(data.new_username)
 
         if existing_user:
-            logger.error(f"Unsuccessful attempt to change username by user with user id: {user_id}. User with this username: {data.new_username} already exists")
+            logger.error({
+                "action": "change_username",
+                "status": "failed",
+                "user_data": f"user_id: {user_id}",
+                "message": f"User with username {data.new_username} already exists"
+            })
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="User with this username already exists",
@@ -96,6 +129,12 @@ class ProfileService:
         user = await self.get_user_by_id(user_id)
         user.username = data.new_username
         await self.session.commit()
+        logger.info({
+            "action": "change_username",
+            "status": "success",
+            "user_data": f"user_email: {user.email}, user_new_username: {data.new_username}",
+            "message": "Username changed successfully"
+        })
         return
 
 
