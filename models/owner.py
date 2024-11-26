@@ -20,6 +20,7 @@ class SetRoleModel(OwnerRequest):
 class ProfileOut(BaseModel):
     username: str
     email: str
+    phone_number: str
     role: str
     is_active: bool
     is_2fa: bool

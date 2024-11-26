@@ -1,4 +1,5 @@
 from __future__ import annotations
+import re
 from typing import Optional
 from fastapi import Form
 from pydantic import EmailStr, BaseModel, field_validator
@@ -16,6 +17,11 @@ class OAuth2EmailPasswordRequestForm:
 class BaseUser(BaseModel):
     email: EmailStr
     username: str
+    phone_number: str
+
+    @field_validator("phone_number")
+    def phone_number_complexity(cls, v):
+        return PhoneNumberValidator.validate_phone_number(v)
 
 class UserRegistration(BaseUser):
     password: str
@@ -82,4 +88,11 @@ class PasswordValidator:
             raise ValueError("Password should contain at least one small letter")
         if not any(char in '!@#$%^&*()_+-=' for char in v):
             raise ValueError("Password should contain at least one special character")
+        return v
+
+class PhoneNumberValidator:
+    @staticmethod
+    def validate_phone_number(v: str) -> str:
+        if not re.match(r'^(\+7|7|8)?[\s\-]?\(?[489][0-9]{2}\)?[\s\-]?[0-9]{3}[\s\-]?[0-9]{2}[\s\-]?[0-9]{2}$', v):
+            raise ValueError("Invalid phone number")
         return v

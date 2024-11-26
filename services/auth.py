@@ -34,34 +34,37 @@ class AuthService:
             self,
             user_data: UserRegistration
     ):
-        stmt = select(tables.User).filter(
-            or_(
-                tables.User.email == user_data.email,
-                tables.User.username == user_data.username
-            )
-        )
-        
-        result = await self.session.execute(stmt)
-        existing_user = result.scalars().first()
 
-        if existing_user:
-            logger.error({
-                "action": "register",
-                "status": "failed",
-                "user_data": f"email: {user_data.email}, username: {user_data.username}",
-                "message": "User with this email or username already exists"
-            })
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail="User with this email or username already exists",
-                headers={
-                    'WWW-Authenticate': 'Bearer'
-                },
-            )
+        attributes = {
+            "email": user_data.email,
+            "username": user_data.username,
+            "phone_number": user_data.phone_number
+        }
+
+        for attr, value in attributes.items():
+            stmt = select(tables.User).filter(getattr(tables.User, attr) == value)
+            result = await self.session.execute(stmt)
+            existing_user = result.scalars().first()
+
+            if existing_user:
+                logger.error({
+                    "action": "register",
+                    "status": "failed",
+                    "user_data": f"{attr}: {value}",
+                    "message": f"User with this {attr} already exists"
+                })
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail=f"User with this {attr} already exists",
+                    headers={
+                        'WWW-Authenticate': 'Bearer'
+                    },
+                )
 
         user = tables.User(
             email = user_data.email,
             username = user_data.username,
+            phone_number = user_data.phone_number,
             password_hash = self.hash_password(user_data.password)
         )
         self.session.add(user)

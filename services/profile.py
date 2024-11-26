@@ -28,6 +28,21 @@ class ProfileService:
 
 
     async def change_password(self, user_id, data):
+        if data.new_password != data.confirm_new_password:
+            logger.error({
+                "action": "change_password",
+                "status": "failed",
+                "user_data": f"user_id: {user_id}",
+                "message": "Passwords do not match"
+            })
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Passwords do not match",
+                headers={
+                    'WWW-Authenticate': 'Bearer'
+                },
+            )
+
         user = await self.get_user_by_id(user_id)
         if not self.verify_passwords(data.password, user.password_hash):
             logger.warning({
@@ -108,24 +123,35 @@ class ProfileService:
         )
 
 
-    async def change_username(self, user_id, data):
-        existing_user = await self.get_user_by_username(data.new_username)
-
+    async def change_phone_number(self, user_id, data):
+        existing_user = await self.get_user_by_phone_number(data.new_phone_number)
         if existing_user:
             logger.error({
-                "action": "change_username",
+                "action": "change_phone_number",
                 "status": "failed",
                 "user_data": f"user_id: {user_id}",
-                "message": f"User with username {data.new_username} already exists"
+                "message": f"User with phone number {data.new_phone_number} already exists"
             })
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail="User with this username already exists",
+                detail="User with this phone number already exists",
                 headers={
-                    'WWW-Authenticate': 'Bearer'
-                },
-            )
-        
+                    
+                })
+
+        user = await self.get_user_by_id(user_id)
+        user.phone_number = data.new_phone_number
+        await self.session.commit()
+        logger.info({
+            "action": "change_phone_number",
+            "status": "success",
+            "user_data": f"user_email: {user.email}, user_new_phone_number: {data.new_phone_number}",
+            "message": "Phone number changed successfully"
+        })
+        return
+
+
+    async def change_username(self, user_id, data):
         user = await self.get_user_by_id(user_id)
         user.username = data.new_username
         await self.session.commit()
@@ -165,6 +191,16 @@ class ProfileService:
             username: str
     ):
         stmt = select(tables.User).filter(tables.User.username == username)
+        result = await self.session.execute(stmt)
+        user = result.scalars().first()
+        return user
+
+
+    async def get_user_by_phone_number(
+            self,
+            phone_number: str
+    ):
+        stmt = select(tables.User).filter(tables.User.phone_number == phone_number)
         result = await self.session.execute(stmt)
         user = result.scalars().first()
         return user

@@ -16,7 +16,7 @@ async def get_profile(
     service : ProfileService = Depends()
 ):
     user = await service.get_user_by_id(current_user)
-    return ProfileOut(username=user.username, email=user.email)
+    return ProfileOut(username=user.username, email=user.email, phone_number=user.phone_number)
 
 
 @router.patch('/change-password')
@@ -44,4 +44,13 @@ async def change_username(
     service : ProfileService = Depends()
 ):
     await service.change_username(current_user, data)
+
+
+@router.patch('/change-phone-number')
+async def change_phone_number(
+    data,
+    current_user: str = Depends(TokenService.get_current_user),
+    service : ProfileService = Depends()
+):
+    await service.change_phone_number(current_user, data)
 

@@ -7,3 +7,11 @@
 2024-11-26 23:07:28.528 | INFO     | services.profile:change_email:97 - {'action': 'change_email', 'status': 'success', 'user_data': 'user_email: tutikosnov@gmail.com', 'message': 'Confirmation (email) message sent successfully to {data.new_email}'}
 2024-11-26 23:08:12.402 | INFO     | services.auth:verify_user_account:276 - {'action': 'verify_user_account', 'status': 'success', 'user_data': 'email: tutikosnov@gmail.com', 'message': 'Account verified successfully'}
 2024-11-26 23:08:28.010 | WARNING  | services.owner:owner_check:13 - {'action': 'owner_check', 'status': 'failed', 'message': 'Incorrect password'}
+2024-11-26 23:43:40.841 | INFO     | services.auth:register:73 - {'action': 'register', 'status': 'success', 'user_data': 'email: tutikosnov@gmail.com', 'message': 'User registered successfully'}
+2024-11-26 23:43:46.794 | INFO     | services.auth:verify_user_account:279 - {'action': 'verify_user_account', 'status': 'success', 'user_data': 'email: tutikosnov@gmail.com', 'message': 'Account verified successfully'}
+2024-11-26 23:44:07.909 | INFO     | services.auth:authenticate_user:140 - {'action': 'login', 'status': 'success', 'user_data': 'email: tutikosnov@gmail.com', 'message': 'User logged in successfully'}
+2024-11-26 23:44:21.490 | INFO     | services.token:get_current_user:80 - {'action': 'get_current_user', 'status': 'success', 'user_id': '1', 'message': 'User authenticated'}
+2024-11-26 23:44:38.241 | WARNING  | services.owner:owner_check:13 - {'action': 'owner_check', 'status': 'failed', 'message': 'Incorrect password'}
+2024-11-26 23:50:09.306 | INFO     | services.auth:authenticate_user:140 - {'action': 'login', 'status': 'success', 'user_data': 'email: tutikosnov@gmail.com', 'message': 'User logged in successfully'}
+2024-11-26 23:50:21.506 | INFO     | services.token:get_current_user:80 - {'action': 'get_current_user', 'status': 'success', 'user_id': '1', 'message': 'User authenticated'}
+2024-11-26 23:50:41.784 | INFO     | services.token:get_current_user:80 - {'action': 'get_current_user', 'status': 'success', 'user_id': '1', 'message': 'User authenticated'}
