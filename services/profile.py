@@ -5,7 +5,7 @@ from fastapi import HTTPException, status
 from fastapi.responses import JSONResponse
 from sqlalchemy.future import select
 
-from celery_tasks import send_email_to_confirm
+from mail import send_email_to_confirm
 from services.auth import ph
 
 from database import get_session

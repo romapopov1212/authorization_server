@@ -15,3 +15,14 @@
 2024-11-26 23:50:09.306 | INFO     | services.auth:authenticate_user:140 - {'action': 'login', 'status': 'success', 'user_data': 'email: tutikosnov@gmail.com', 'message': 'User logged in successfully'}
 2024-11-26 23:50:21.506 | INFO     | services.token:get_current_user:80 - {'action': 'get_current_user', 'status': 'success', 'user_id': '1', 'message': 'User authenticated'}
 2024-11-26 23:50:41.784 | INFO     | services.token:get_current_user:80 - {'action': 'get_current_user', 'status': 'success', 'user_id': '1', 'message': 'User authenticated'}
+2024-11-28 17:59:33.282 | ERROR    | services.auth:register:49 - {'action': 'register', 'status': 'failed', 'user_data': 'email: popovroma054@gmail.com', 'message': 'User with this email already exists'}
+2024-11-28 18:03:58.223 | INFO     | services.auth:register:72 - {'action': 'register', 'status': 'success', 'user_data': 'email: popovroma054@gmail.com', 'message': 'User registered successfully'}
+2024-11-28 18:04:40.988 | INFO     | services.auth:verify_user_account:278 - {'action': 'verify_user_account', 'status': 'success', 'user_data': 'email: popovroma054@gmail.com', 'message': 'Account verified successfully'}
+2024-11-28 18:05:04.475 | INFO     | services.auth:authenticate_user:139 - {'action': 'login', 'status': 'success', 'user_data': 'email: popovroma054@gmail.com', 'message': 'User logged in successfully'}
+2024-11-28 18:05:22.719 | INFO     | services.token:get_current_user:80 - {'action': 'get_current_user', 'status': 'success', 'user_id': '3', 'message': 'User authenticated'}
+2024-11-28 20:04:35.255 | INFO     | services.auth:register:72 - {'action': 'register', 'status': 'success', 'user_data': 'email: popovrromma@gmail.com', 'message': 'User registered successfully'}
+2024-11-28 20:07:57.192 | INFO     | services.auth:verify_user_account:278 - {'action': 'verify_user_account', 'status': 'success', 'user_data': 'email: popovrromma@gmail.com', 'message': 'Account verified successfully'}
+2024-11-28 20:08:28.871 | WARNING  | services.auth:authenticate_user:93 - {'action': 'login', 'status': 'failed', 'user_data': 'email: qwer', 'message': 'Incorrect email or password'}
+2024-11-28 20:08:52.207 | WARNING  | services.auth:authenticate_user:93 - {'action': 'login', 'status': 'failed', 'user_data': 'email: qwer', 'message': 'Incorrect email or password'}
+2024-11-28 20:09:06.843 | INFO     | services.auth:authenticate_user:139 - {'action': 'login', 'status': 'success', 'user_data': 'email: popovrromma@gmail.com', 'message': 'User logged in successfully'}
+2024-11-28 20:09:30.631 | INFO     | services.token:get_current_user:80 - {'action': 'get_current_user', 'status': 'success', 'user_id': '4', 'message': 'User authenticated'}

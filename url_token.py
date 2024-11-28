@@ -1,11 +1,8 @@
-##потом куда нибудь перенесу, тут это лежит времено
-
 from itsdangerous import URLSafeTimedSerializer
-
-
-
 from logger import logger
+
 from settings import settings
+
 
 serializer = URLSafeTimedSerializer(
     secret_key=settings.jwt_secret, salt="email-configuration"
