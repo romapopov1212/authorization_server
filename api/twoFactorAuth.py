@@ -10,10 +10,11 @@ router = APIRouter()
 
 
 @router.post("/enable_twoFactorAuth")
-def enable_topt(
+async def enable_topt(
         current_user: str = Depends(TokenService.get_current_user),
         service: TwoFactorAuthService = Depends(),
+        profile_service: ProfileService = Depends()
 
 ):
-    user_data = ProfileService.get_user_by_id(current_user)
+    user_data = await profile_service.get_user_by_id(current_user)
     return service.enable_otp(user_data)

@@ -297,7 +297,7 @@ class AuthService:
         )
 
 
-    def get_new_refresh_token(
+    async def get_new_refresh_token(
             self,
             token_detail: dict = Depends(RefreshTokenBearer()),
     ):
