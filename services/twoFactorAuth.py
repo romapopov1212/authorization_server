@@ -1,17 +1,17 @@
-#добавить логи
 import pyotp
 import qrcode
-from fastapi import Depends, HTTPException
+from fastapi import Depends
+from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
-from database import get_session
+from fastapi import status
+from sqlalchemy.future import select
+
 from services.token import TokenService as TS
 from models.auth import UserTwoFa
-from settings import settings
-from fastapi.responses import JSONResponse
-from fastapi import status
+from database import get_session
 from db.tables import User
-from sqlalchemy.future import select
-from sqlalchemy.ext.asyncio import AsyncSession
+from logger import logger
+
 
 class TwoFactorAuthService:
 
@@ -28,11 +28,23 @@ class TwoFactorAuthService:
             user_data.is_2fa = True
             self.session.add(user_data)
             await self.session.commit()
+            logger.info({
+                "action": "enable 2fa",
+                "status": "success",
+                "user_data": f"email: {user_data.email}",
+                "message": "Enable 2fa successfully"
+            })
             return JSONResponse(
                 content={"message": "Qr created successfully"},
                 status_code=status.HTTP_200_OK,
             )
         else:
+            logger.error({
+                "action": "enable 2fa",
+                "status": "failed",
+                "user_data": f"email: {user_data.email}",
+                "message": "2fa is already enabled"
+            })
             return JSONResponse(
                 content={"message": "Failed! 2fa is already enabled"},
                 status_code=status.HTTP_400_BAD_REQUEST,
@@ -45,6 +57,12 @@ class TwoFactorAuthService:
         user = result.scalars().first()
 
         if not user:
+            logger.error({
+                "action": "verify 2fa",
+                "status": "failed",
+                "user_data": f"email: {user.email}",
+                "message": "User not found"
+            })
             return JSONResponse(
                 content={"message": "User not found"},
                 status_code=status.HTTP_404_NOT_FOUND,
@@ -52,11 +70,23 @@ class TwoFactorAuthService:
 
         totp = pyotp.TOTP(user.secret)
         if totp.verify(code):
+            logger.info({
+                "action": "verify 2fa",
+                "status": "success",
+                "user_data": f"email: {user.email}",
+                "message": "2FA verification succeeded"
+            })
             return JSONResponse(
                 content={"message": "2FA verification succeeded"},
                 status_code=status.HTTP_200_OK,
             )
         else:
+            logger.error({
+                "action": "verify 2fa",
+                "status": "failed",
+                "user_data": f"email: {user.email}",
+                "message": "Invalid 2fa code"
+            })
             return JSONResponse(
                 content={"message": "Invalid 2FA code"},
                 status_code=status.HTTP_400_BAD_REQUEST,
