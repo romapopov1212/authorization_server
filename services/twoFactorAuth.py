@@ -1,3 +1,4 @@
+#добавить логи
 import pyotp
 import qrcode
 from fastapi import Depends
@@ -16,24 +17,24 @@ class TwoFactorAuthService:
         self.session = session
         self.token_service = token_service
 
-    def enable_otp(self, user_data: UserTwoFa, ):
+    async def enable_otp(self, user_data: UserTwoFa, ):
         if user_data.is_2fa is False:
             uri = pyotp.totp.TOTP(settings.TOTP_SECRET).provisioning_uri(name=user_data.username,
                                                                          issuer_name="App")
             qrcode.make(uri).save("qrcode.png")
             user_data.is_2fa = True
             self.session.add(user_data)
-            self.session.commit()
+            await self.session.commit()
             return JSONResponse(
                 content={
-                    "message": "qr cjplfy",
+                    "message": "Qr created successfully",
                 },
                 status_code=status.HTTP_200_OK,
             )
         else:
             return JSONResponse(
                 content={
-                    "message": "qr cjplfy",
+                    "message": "Failed! 2fa is already enabled",
                 },
                 status_code=status.HTTP_401_UNAUTHORIZED,
             )

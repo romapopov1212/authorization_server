@@ -3,8 +3,8 @@ from fastapi import Depends
 from services.token import TokenService
 from models.auth import UserTwoFa
 from services.profile import ProfileService
+from services.auth import AuthService
 from services.twoFactorAuth import TwoFactorAuthService
-
 
 router = APIRouter()
 
@@ -17,4 +17,4 @@ async def enable_topt(
 
 ):
     user_data = await profile_service.get_user_by_id(current_user)
-    return service.enable_otp(user_data)
+    return await service.enable_otp(user_data)
