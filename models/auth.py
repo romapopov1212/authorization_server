@@ -45,12 +45,6 @@ class UserLogin(BaseModel):
     email: EmailStr
     password: str
 
-# class Otp(BaseUser):
-#     otp_enabled: bool = False
-#     otp_verified: bool = False
-#
-#     otp_base32: str | None = None
-#     otp_auth_url: str | None = None
 
 class SecuritySettings(BaseModel):
     otp_configured: bool
@@ -72,8 +66,12 @@ class UserRequestSchema(BaseModel):
     user_id: str
     token: str | None = None
 
-class UserTwoFa(BaseUser):
+class UserTwoFa(BaseModel):
+    email: str
     is_2fa: bool
+    secret: str
+class VerifyCodeRequest(BaseModel):
+    code: str
 
 class PasswordValidator:
     @staticmethod
