@@ -15,9 +15,8 @@ from logger import logger
 
 class TwoFactorAuthService:
 
-    def __init__(self, session: Session = Depends(get_session), token_service: TS = Depends()):
+    def __init__(self, session: Session = Depends(get_session)):
         self.session = session
-        self.token_service = token_service
 
     async def enable_otp(self, user_data: UserTwoFa):
         if user_data.is_2fa is False:

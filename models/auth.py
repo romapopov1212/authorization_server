@@ -62,16 +62,13 @@ class PasswordResetConfirmModel(BaseModel):
     def password_complexity(cls, v):
         return PasswordValidator.validate_password(v)
 
-class UserRequestSchema(BaseModel):
-    user_id: str
-    token: str | None = None
+
 
 class UserTwoFa(BaseModel):
     email: str
     is_2fa: bool
     secret: str
-class VerifyCodeRequest(BaseModel):
-    code: str
+
 
 class PasswordValidator:
     @staticmethod

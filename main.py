@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+
 from db import tables
 from api import router
 from database import engine

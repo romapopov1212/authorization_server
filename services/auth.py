@@ -9,14 +9,13 @@ from fastapi import status
 from fastapi.responses import JSONResponse
 from sqlalchemy.future import select
 
-from url_token import verify_token
+from url_token import verify_token, decode_url_safe_token, create_url_safe_token
 from database import get_session
 from db import tables
 from models.auth import Token, UserRegistration, PasswordResetConfirmModel, PasswordResetRequestModel
 from settings import settings
 from services.token import TokenService as TS, RefreshTokenBearer
 from logger import logger
-from url_token import decode_url_safe_token, create_url_safe_token
 from mail import send_email_to_confirm, send_email
 
 

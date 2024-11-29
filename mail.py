@@ -1,6 +1,7 @@
 from fastapi_mail import FastMail, ConnectionConfig, MessageSchema, MessageType
-from settings import settings
 from pathlib import Path
+
+from settings import settings
 from url_token import create_url_safe_token
 from url_token import verify_token
 

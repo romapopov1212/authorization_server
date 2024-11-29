@@ -1,11 +1,11 @@
 from fastapi import APIRouter
 from fastapi import Depends
+
 from services.token import TokenService
-from models.auth import UserTwoFa
 from services.profile import ProfileService
-from services.auth import AuthService
 from services.twoFactorAuth import TwoFactorAuthService
-from models.auth import VerifyCodeRequest
+
+
 router = APIRouter()
 
 
