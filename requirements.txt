@@ -21,3 +21,4 @@ loguru
 itsdangerous
 fastapi-mail
 qrcode
+pytest

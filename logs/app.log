@@ -26,3 +26,124 @@
 2024-11-28 20:08:52.207 | WARNING  | services.auth:authenticate_user:93 - {'action': 'login', 'status': 'failed', 'user_data': 'email: qwer', 'message': 'Incorrect email or password'}
 2024-11-28 20:09:06.843 | INFO     | services.auth:authenticate_user:139 - {'action': 'login', 'status': 'success', 'user_data': 'email: popovrromma@gmail.com', 'message': 'User logged in successfully'}
 2024-11-28 20:09:30.631 | INFO     | services.token:get_current_user:80 - {'action': 'get_current_user', 'status': 'success', 'user_id': '4', 'message': 'User authenticated'}
+2024-11-29 00:57:12.684 | ERROR    | services.token:decode_token:112 - {'action': 'decode_token', 'status': 'failed', 'token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0IiwiZXhwIjoxNzMyNzg5NDQ2LCJyZWZyZXNoIjpmYWxzZSwiaXNzIjoiRlZrLTdJbnAydFJuT19SSkd1emlFV2htMXpaNWFsR1hncUlqZDJ6NjhfZyJ9.713HLBKlzR4Dv2lXLgSUurW_QP0aLUluWC66VgedUUo', 'message': 'Error decoding token: Signature has expired'}
+2024-11-29 00:57:37.788 | INFO     | services.auth:authenticate_user:139 - {'action': 'login', 'status': 'success', 'user_data': 'email: popovrromma@gmail.com', 'message': 'User logged in successfully'}
+2024-11-29 01:00:04.651 | INFO     | services.token:get_current_user:80 - {'action': 'get_current_user', 'status': 'success', 'user_id': '4', 'message': 'User authenticated'}
+2024-11-29 01:05:17.014 | INFO     | services.token:get_current_user:80 - {'action': 'get_current_user', 'status': 'success', 'user_id': '4', 'message': 'User authenticated'}
+2024-11-29 01:06:10.513 | INFO     | services.token:get_current_user:80 - {'action': 'get_current_user', 'status': 'success', 'user_id': '4', 'message': 'User authenticated'}
+2024-11-29 01:06:43.472 | INFO     | services.token:get_current_user:80 - {'action': 'get_current_user', 'status': 'success', 'user_id': '4', 'message': 'User authenticated'}
+2024-11-29 01:13:00.382 | INFO     | services.token:get_current_user:80 - {'action': 'get_current_user', 'status': 'success', 'user_id': '4', 'message': 'User authenticated'}
+2024-11-29 01:15:27.152 | INFO     | services.auth:authenticate_user:139 - {'action': 'login', 'status': 'success', 'user_data': 'email: popovrromma@gmail.com', 'message': 'User logged in successfully'}
+2024-11-29 01:15:47.972 | INFO     | services.token:get_current_user:80 - {'action': 'get_current_user', 'status': 'success', 'user_id': '4', 'message': 'User authenticated'}
+2024-11-29 01:18:15.175 | INFO     | services.token:get_current_user:80 - {'action': 'get_current_user', 'status': 'success', 'user_id': '4', 'message': 'User authenticated'}
+2024-11-29 01:20:16.732 | INFO     | services.token:get_current_user:80 - {'action': 'get_current_user', 'status': 'success', 'user_id': '4', 'message': 'User authenticated'}
+2024-11-29 01:21:14.151 | INFO     | services.token:get_current_user:80 - {'action': 'get_current_user', 'status': 'success', 'user_id': '4', 'message': 'User authenticated'}
+2024-11-29 01:23:08.905 | INFO     | services.token:get_current_user:80 - {'action': 'get_current_user', 'status': 'success', 'user_id': '4', 'message': 'User authenticated'}
+2024-11-29 01:23:23.634 | INFO     | services.token:get_current_user:80 - {'action': 'get_current_user', 'status': 'success', 'user_id': '4', 'message': 'User authenticated'}
+2024-11-29 01:25:56.549 | INFO     | services.token:get_current_user:80 - {'action': 'get_current_user', 'status': 'success', 'user_id': '4', 'message': 'User authenticated'}
+2024-11-29 01:26:19.727 | INFO     | services.token:get_current_user:80 - {'action': 'get_current_user', 'status': 'success', 'user_id': '4', 'message': 'User authenticated'}
+2024-11-29 01:26:43.537 | INFO     | services.token:get_current_user:80 - {'action': 'get_current_user', 'status': 'success', 'user_id': '4', 'message': 'User authenticated'}
+2024-11-29 01:28:11.393 | INFO     | services.token:get_current_user:80 - {'action': 'get_current_user', 'status': 'success', 'user_id': '4', 'message': 'User authenticated'}
+2024-11-29 01:28:54.471 | INFO     | services.token:get_current_user:80 - {'action': 'get_current_user', 'status': 'success', 'user_id': '4', 'message': 'User authenticated'}
+2024-11-29 01:28:57.371 | INFO     | services.token:get_current_user:80 - {'action': 'get_current_user', 'status': 'success', 'user_id': '4', 'message': 'User authenticated'}
+2024-11-29 01:29:28.553 | INFO     | services.auth:authenticate_user:139 - {'action': 'login', 'status': 'success', 'user_data': 'email: popovrromma@gmail.com', 'message': 'User logged in successfully'}
+2024-11-29 01:29:43.958 | INFO     | services.token:get_current_user:80 - {'action': 'get_current_user', 'status': 'success', 'user_id': '4', 'message': 'User authenticated'}
+2024-11-29 01:30:32.232 | INFO     | services.token:get_current_user:80 - {'action': 'get_current_user', 'status': 'success', 'user_id': '4', 'message': 'User authenticated'}
+2024-11-29 01:30:44.318 | INFO     | services.token:get_current_user:80 - {'action': 'get_current_user', 'status': 'success', 'user_id': '4', 'message': 'User authenticated'}
+2024-11-29 01:31:06.003 | INFO     | services.token:get_current_user:80 - {'action': 'get_current_user', 'status': 'success', 'user_id': '4', 'message': 'User authenticated'}
+2024-11-29 01:31:46.985 | INFO     | services.token:get_current_user:80 - {'action': 'get_current_user', 'status': 'success', 'user_id': '4', 'message': 'User authenticated'}
+2024-11-29 01:36:03.463 | INFO     | services.token:get_current_user:80 - {'action': 'get_current_user', 'status': 'success', 'user_id': '4', 'message': 'User authenticated'}
+2024-11-29 01:38:44.233 | INFO     | services.token:get_current_user:80 - {'action': 'get_current_user', 'status': 'success', 'user_id': '4', 'message': 'User authenticated'}
+2024-11-29 01:41:44.140 | INFO     | services.token:get_current_user:80 - {'action': 'get_current_user', 'status': 'success', 'user_id': '4', 'message': 'User authenticated'}
+2024-11-29 01:42:28.239 | INFO     | services.auth:authenticate_user:139 - {'action': 'login', 'status': 'success', 'user_data': 'email: popovrromma@gmail.com', 'message': 'User logged in successfully'}
+2024-11-29 01:42:42.224 | INFO     | services.token:get_current_user:80 - {'action': 'get_current_user', 'status': 'success', 'user_id': '4', 'message': 'User authenticated'}
+2024-11-29 01:46:01.504 | INFO     | services.token:get_current_user:80 - {'action': 'get_current_user', 'status': 'success', 'user_id': '4', 'message': 'User authenticated'}
+2024-11-29 01:47:38.788 | INFO     | services.token:get_current_user:80 - {'action': 'get_current_user', 'status': 'success', 'user_id': '4', 'message': 'User authenticated'}
+2024-11-29 01:51:05.382 | INFO     | services.token:get_current_user:80 - {'action': 'get_current_user', 'status': 'success', 'user_id': '4', 'message': 'User authenticated'}
+2024-11-29 01:52:48.079 | INFO     | services.token:get_current_user:80 - {'action': 'get_current_user', 'status': 'success', 'user_id': '4', 'message': 'User authenticated'}
+2024-11-29 01:53:05.664 | INFO     | services.token:get_current_user:80 - {'action': 'get_current_user', 'status': 'success', 'user_id': '4', 'message': 'User authenticated'}
+2024-11-29 01:55:26.489 | INFO     | services.token:get_current_user:80 - {'action': 'get_current_user', 'status': 'success', 'user_id': '4', 'message': 'User authenticated'}
+2024-11-29 01:57:02.648 | INFO     | services.token:get_current_user:80 - {'action': 'get_current_user', 'status': 'success', 'user_id': '4', 'message': 'User authenticated'}
+2024-11-29 01:59:58.545 | INFO     | services.owner:delete_user:95 - {'action': 'delete_user', 'status': 'success', 'user_data': 'user_email: popovroma054@gmail.com', 'message': 'User deleted successfully'}
+2024-11-29 02:02:05.582 | INFO     | services.owner:set_role:35 - {'action': 'set_role', 'status': 'success', 'user_data': 'user_email: popovrromma@gmail.com, user_role: user', 'message': 'Role changed successfully'}
+2024-11-29 02:10:11.214 | INFO     | services.auth:authenticate_user:139 - {'action': 'login', 'status': 'success', 'user_data': 'email: popovrromma@gmail.com', 'message': 'User logged in successfully'}
+2024-11-29 02:10:26.122 | INFO     | services.token:get_current_user:80 - {'action': 'get_current_user', 'status': 'success', 'user_id': '4', 'message': 'User authenticated'}
+2024-11-29 02:15:10.014 | INFO     | services.token:get_current_user:80 - {'action': 'get_current_user', 'status': 'success', 'user_id': '4', 'message': 'User authenticated'}
+2024-11-29 02:16:17.557 | INFO     | services.token:get_current_user:80 - {'action': 'get_current_user', 'status': 'success', 'user_id': '4', 'message': 'User authenticated'}
+2024-11-29 02:18:13.382 | INFO     | services.token:get_current_user:80 - {'action': 'get_current_user', 'status': 'success', 'user_id': '4', 'message': 'User authenticated'}
+2024-11-29 02:18:43.807 | INFO     | services.token:get_current_user:80 - {'action': 'get_current_user', 'status': 'success', 'user_id': '4', 'message': 'User authenticated'}
+2024-11-29 02:21:48.633 | INFO     | services.token:get_current_user:80 - {'action': 'get_current_user', 'status': 'success', 'user_id': '4', 'message': 'User authenticated'}
+2024-11-29 02:22:09.797 | INFO     | services.token:get_current_user:80 - {'action': 'get_current_user', 'status': 'success', 'user_id': '4', 'message': 'User authenticated'}
+2024-11-29 02:22:57.317 | INFO     | services.token:get_current_user:80 - {'action': 'get_current_user', 'status': 'success', 'user_id': '4', 'message': 'User authenticated'}
+2024-11-29 02:25:27.715 | INFO     | services.auth:authenticate_user:139 - {'action': 'login', 'status': 'success', 'user_data': 'email: popovrromma@gmail.com', 'message': 'User logged in successfully'}
+2024-11-29 02:25:40.181 | INFO     | services.token:get_current_user:80 - {'action': 'get_current_user', 'status': 'success', 'user_id': '4', 'message': 'User authenticated'}
+2024-11-29 02:26:30.365 | INFO     | services.token:get_current_user:80 - {'action': 'get_current_user', 'status': 'success', 'user_id': '4', 'message': 'User authenticated'}
+2024-11-29 02:29:54.142 | INFO     | services.token:get_current_user:80 - {'action': 'get_current_user', 'status': 'success', 'user_id': '4', 'message': 'User authenticated'}
+2024-11-29 02:32:12.504 | INFO     | services.token:get_current_user:80 - {'action': 'get_current_user', 'status': 'success', 'user_id': '4', 'message': 'User authenticated'}
+2024-11-29 02:32:46.476 | INFO     | services.token:get_current_user:80 - {'action': 'get_current_user', 'status': 'success', 'user_id': '4', 'message': 'User authenticated'}
+2024-11-29 02:39:20.550 | INFO     | services.token:get_current_user:80 - {'action': 'get_current_user', 'status': 'success', 'user_id': '4', 'message': 'User authenticated'}
+2024-11-29 02:43:06.559 | INFO     | services.auth:authenticate_user:139 - {'action': 'login', 'status': 'success', 'user_data': 'email: popovrromma@gmail.com', 'message': 'User logged in successfully'}
+2024-11-29 02:43:22.631 | INFO     | services.token:get_current_user:80 - {'action': 'get_current_user', 'status': 'success', 'user_id': '4', 'message': 'User authenticated'}
+2024-11-29 02:49:51.336 | INFO     | services.token:get_current_user:80 - {'action': 'get_current_user', 'status': 'success', 'user_id': '4', 'message': 'User authenticated'}
+2024-11-29 02:50:41.372 | INFO     | services.token:get_current_user:80 - {'action': 'get_current_user', 'status': 'success', 'user_id': '4', 'message': 'User authenticated'}
+2024-11-29 02:51:30.017 | INFO     | services.token:get_current_user:80 - {'action': 'get_current_user', 'status': 'success', 'user_id': '4', 'message': 'User authenticated'}
+2024-11-29 02:51:46.220 | INFO     | services.token:get_current_user:80 - {'action': 'get_current_user', 'status': 'success', 'user_id': '4', 'message': 'User authenticated'}
+2024-11-29 02:52:10.895 | INFO     | services.token:get_current_user:80 - {'action': 'get_current_user', 'status': 'success', 'user_id': '4', 'message': 'User authenticated'}
+2024-11-29 13:37:38.936 | WARNING  | services.auth:authenticate_user:93 - {'action': 'login', 'status': 'failed', 'user_data': 'email: popovroma054@gmail.com', 'message': 'Incorrect email or password'}
+2024-11-29 13:37:46.248 | INFO     | services.auth:authenticate_user:139 - {'action': 'login', 'status': 'success', 'user_data': 'email: popovrromma@gmail.com', 'message': 'User logged in successfully'}
+2024-11-29 13:38:01.575 | INFO     | services.token:get_current_user:80 - {'action': 'get_current_user', 'status': 'success', 'user_id': '4', 'message': 'User authenticated'}
+2024-11-29 13:40:28.764 | INFO     | services.token:get_current_user:80 - {'action': 'get_current_user', 'status': 'success', 'user_id': '4', 'message': 'User authenticated'}
+2024-11-29 13:46:12.133 | INFO     | services.auth:authenticate_user:142 - {'action': 'login', 'status': 'success', 'user_data': 'email: popovrromma@gmail.com', 'message': 'User logged in successfully'}
+2024-11-29 13:46:24.464 | INFO     | services.token:get_current_user:80 - {'action': 'get_current_user', 'status': 'success', 'user_id': '4', 'message': 'User authenticated'}
+2024-11-29 13:49:25.141 | INFO     | services.token:get_current_user:80 - {'action': 'get_current_user', 'status': 'success', 'user_id': '4', 'message': 'User authenticated'}
+2024-11-29 13:51:17.237 | INFO     | services.token:get_current_user:80 - {'action': 'get_current_user', 'status': 'success', 'user_id': '4', 'message': 'User authenticated'}
+2024-11-29 13:52:31.658 | INFO     | services.token:get_current_user:80 - {'action': 'get_current_user', 'status': 'success', 'user_id': '4', 'message': 'User authenticated'}
+2024-11-29 13:53:14.686 | INFO     | services.token:get_current_user:80 - {'action': 'get_current_user', 'status': 'success', 'user_id': '4', 'message': 'User authenticated'}
+2024-11-29 13:56:34.341 | INFO     | services.auth:register:72 - {'action': 'register', 'status': 'success', 'user_data': 'email: popovroma054@gmail.com', 'message': 'User registered successfully'}
+2024-11-29 13:56:57.623 | INFO     | services.auth:verify_user_account:278 - {'action': 'verify_user_account', 'status': 'success', 'user_data': 'email: popovroma054@gmail.com', 'message': 'Account verified successfully'}
+2024-11-29 13:57:27.769 | INFO     | services.auth:authenticate_user:139 - {'action': 'login', 'status': 'success', 'user_data': 'email: popovroma054@gmail.com', 'message': 'User logged in successfully'}
+2024-11-29 13:57:44.812 | INFO     | services.token:get_current_user:80 - {'action': 'get_current_user', 'status': 'success', 'user_id': '6', 'message': 'User authenticated'}
+2024-11-29 13:59:51.792 | INFO     | services.token:get_current_user:80 - {'action': 'get_current_user', 'status': 'success', 'user_id': '6', 'message': 'User authenticated'}
+2024-11-29 14:45:05.693 | INFO     | services.auth:authenticate_user:139 - {'action': 'login', 'status': 'success', 'user_data': 'email: popovroma054@gmail.com', 'message': 'User logged in successfully'}
+2024-11-29 16:30:14.205 | INFO     | services.auth:authenticate_user:139 - {'action': 'login', 'status': 'success', 'user_data': 'email: popovroma054@gmail.com', 'message': 'User logged in successfully'}
+2024-11-29 16:30:30.717 | INFO     | services.token:get_current_user:80 - {'action': 'get_current_user', 'status': 'success', 'user_id': '6', 'message': 'User authenticated'}
+2024-11-29 17:00:05.438 | INFO     | services.auth:authenticate_user:139 - {'action': 'login', 'status': 'success', 'user_data': 'email: popovroma054@gmail.com', 'message': 'User logged in successfully'}
+2024-11-29 17:00:29.613 | INFO     | services.token:get_current_user:80 - {'action': 'get_current_user', 'status': 'success', 'user_id': '6', 'message': 'User authenticated'}
+2024-11-29 17:05:57.018 | INFO     | services.token:get_current_user:80 - {'action': 'get_current_user', 'status': 'success', 'user_id': '6', 'message': 'User authenticated'}
+2024-11-29 17:08:00.263 | INFO     | services.token:get_current_user:80 - {'action': 'get_current_user', 'status': 'success', 'user_id': '6', 'message': 'User authenticated'}
+2024-11-29 17:08:35.543 | INFO     | services.token:get_current_user:80 - {'action': 'get_current_user', 'status': 'success', 'user_id': '6', 'message': 'User authenticated'}
+2024-11-29 17:11:24.609 | INFO     | services.auth:authenticate_user:139 - {'action': 'login', 'status': 'success', 'user_data': 'email: popovroma054@gmail.com', 'message': 'User logged in successfully'}
+2024-11-29 17:11:38.653 | INFO     | services.token:get_current_user:80 - {'action': 'get_current_user', 'status': 'success', 'user_id': '6', 'message': 'User authenticated'}
+2024-11-29 17:11:48.145 | INFO     | services.token:get_current_user:80 - {'action': 'get_current_user', 'status': 'success', 'user_id': '6', 'message': 'User authenticated'}
+2024-11-29 17:24:51.715 | INFO     | services.token:get_current_user:80 - {'action': 'get_current_user', 'status': 'success', 'user_id': '6', 'message': 'User authenticated'}
+2024-11-29 17:27:14.115 | INFO     | services.auth:authenticate_user:139 - {'action': 'login', 'status': 'success', 'user_data': 'email: popovroma054@gmail.com', 'message': 'User logged in successfully'}
+2024-11-29 17:27:27.544 | ERROR    | services.token:get_current_user:70 - {'action': 'get_current_user', 'status': 'failed', 'token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2IiwiZXhwIjoxNzMyODY2MTM0LCJyZWZyZXNoIjpmYWxzZSwiaXNzIjoiRlZrLTdJbnAydFJuT19SSkd1emlFV2htMXpaNWFsR1hncUlqZDJ6NjhfZyJ9.jLbIiv5c1U3WEceietdyGoQvEeYrjLWpCsVVO4rD8G', 'message': 'Invalid token'}
+2024-11-29 17:27:45.191 | ERROR    | services.token:get_current_user:70 - {'action': 'get_current_user', 'status': 'failed', 'token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2IiwiZXhwIjoxNzMyODY2MTM0LCJyZWZyZXNoIjpmYWxzZSwiaXNzIjoiRlZrLTdJbnAydFJuT19SSkd1emlFV2htMXpaNWFsR1hncUlqZDJ6NjhfZyJ9.jLbIiv5c1U3WEceietdyGoQvEeYrjLWpCsVVO4rD8G', 'message': 'Invalid token'}
+2024-11-29 17:28:32.246 | WARNING  | services.auth:authenticate_user:93 - {'action': 'login', 'status': 'failed', 'user_data': 'email: popovroma054@gmail.com&', 'message': 'Incorrect email or password'}
+2024-11-29 17:28:41.705 | INFO     | services.auth:authenticate_user:139 - {'action': 'login', 'status': 'success', 'user_data': 'email: popovroma054@gmail.com', 'message': 'User logged in successfully'}
+2024-11-29 17:28:55.944 | INFO     | services.token:get_current_user:80 - {'action': 'get_current_user', 'status': 'success', 'user_id': '6', 'message': 'User authenticated'}
+2024-11-29 17:29:33.602 | INFO     | services.token:get_current_user:80 - {'action': 'get_current_user', 'status': 'success', 'user_id': '6', 'message': 'User authenticated'}
+2024-11-29 17:29:58.769 | INFO     | services.token:get_current_user:80 - {'action': 'get_current_user', 'status': 'success', 'user_id': '6', 'message': 'User authenticated'}
+2024-11-29 17:30:21.046 | INFO     | services.token:get_current_user:80 - {'action': 'get_current_user', 'status': 'success', 'user_id': '6', 'message': 'User authenticated'}
+2024-11-29 17:59:21.117 | INFO     | services.auth:register:72 - {'action': 'register', 'status': 'success', 'user_data': 'email: popovroma054@gmail.com', 'message': 'User registered successfully'}
+2024-11-29 18:00:25.159 | INFO     | services.auth:verify_user_account:278 - {'action': 'verify_user_account', 'status': 'success', 'user_data': 'email: popovroma054@gmail.com', 'message': 'Account verified successfully'}
+2024-11-29 18:01:04.084 | INFO     | services.auth:authenticate_user:139 - {'action': 'login', 'status': 'success', 'user_data': 'email: popovroma054@gmail.com', 'message': 'User logged in successfully'}
+2024-11-29 18:01:18.239 | INFO     | services.token:get_current_user:80 - {'action': 'get_current_user', 'status': 'success', 'user_id': '1', 'message': 'User authenticated'}
+2024-11-29 18:13:06.233 | INFO     | services.auth:authenticate_user:139 - {'action': 'login', 'status': 'success', 'user_data': 'email: popovroma054@gmail.com', 'message': 'User logged in successfully'}
+2024-11-29 18:14:06.825 | INFO     | services.token:get_current_user:80 - {'action': 'get_current_user', 'status': 'success', 'user_id': '1', 'message': 'User authenticated'}
+2024-11-29 18:14:24.530 | INFO     | services.token:get_current_user:80 - {'action': 'get_current_user', 'status': 'success', 'user_id': '1', 'message': 'User authenticated'}
+2024-11-29 18:14:43.196 | INFO     | services.token:get_current_user:80 - {'action': 'get_current_user', 'status': 'success', 'user_id': '1', 'message': 'User authenticated'}
+2024-11-29 22:58:19.555 | INFO     | services.auth:authenticate_user:139 - {'action': 'login', 'status': 'success', 'user_data': 'email: popovroma054@gmail.com', 'message': 'User logged in successfully'}
+2024-11-29 22:58:34.010 | INFO     | services.token:get_current_user:80 - {'action': 'get_current_user', 'status': 'success', 'user_id': '1', 'message': 'User authenticated'}
+2024-11-29 22:58:54.216 | INFO     | services.token:get_current_user:80 - {'action': 'get_current_user', 'status': 'success', 'user_id': '1', 'message': 'User authenticated'}
+2024-11-29 23:01:18.896 | INFO     | services.auth:authenticate_user:139 - {'action': 'login', 'status': 'success', 'user_data': 'email: popovroma054@gmail.com', 'message': 'User logged in successfully'}
+2024-11-29 23:01:47.595 | INFO     | services.token:get_current_user:80 - {'action': 'get_current_user', 'status': 'success', 'user_id': '1', 'message': 'User authenticated'}
+2024-11-30 12:23:17.310 | INFO     | services.auth:authenticate_user:138 - {'action': 'login', 'status': 'success', 'user_data': 'email: popovroma054@gmail.com', 'message': 'User logged in successfully'}
+2024-11-30 12:23:34.646 | INFO     | services.token:get_current_user:80 - {'action': 'get_current_user', 'status': 'success', 'user_id': '1', 'message': 'User authenticated'}
+2024-11-30 12:23:34.652 | ERROR    | services.twoFactorAuth:enable_otp:40 - {'action': 'enable 2fa', 'status': 'failed', 'user_data': 'email: popovroma054@gmail.com', 'message': '2fa is already enabled'}
+2024-11-30 12:25:54.994 | INFO     | services.token:get_current_user:80 - {'action': 'get_current_user', 'status': 'success', 'user_id': '1', 'message': 'User authenticated'}
+2024-11-30 12:25:55.113 | INFO     | services.twoFactorAuth:enable_otp:29 - {'action': 'enable 2fa', 'status': 'success', 'user_data': 'email: popovroma054@gmail.com', 'message': 'Enable 2fa successfully'}
+2024-11-30 12:26:25.737 | INFO     | services.token:get_current_user:80 - {'action': 'get_current_user', 'status': 'success', 'user_id': '1', 'message': 'User authenticated'}
+2024-11-30 12:26:25.773 | INFO     | services.twoFactorAuth:verify_2fa_code:71 - {'action': 'verify 2fa', 'status': 'success', 'user_data': 'email: popovroma054@gmail.com', 'message': '2FA verification succeeded'}
+2024-11-30 12:26:36.168 | INFO     | services.token:get_current_user:80 - {'action': 'get_current_user', 'status': 'success', 'user_id': '1', 'message': 'User authenticated'}
+2024-11-30 12:26:36.173 | ERROR    | services.twoFactorAuth:verify_2fa_code:82 - {'action': 'verify 2fa', 'status': 'failed', 'user_data': 'email: popovroma054@gmail.com', 'message': 'Invalid 2fa code'}

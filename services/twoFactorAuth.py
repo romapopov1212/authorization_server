@@ -6,7 +6,6 @@ from sqlalchemy.orm import Session
 from fastapi import status
 from sqlalchemy.future import select
 
-from services.token import TokenService as TS
 from models.auth import UserTwoFa
 from database import get_session
 from db.tables import User
