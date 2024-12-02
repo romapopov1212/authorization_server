@@ -9,6 +9,7 @@ from fastapi import status
 from fastapi.responses import JSONResponse
 from sqlalchemy.future import select
 
+from services.twoFactorAuth import TwoFactorAuthService as Tfs
 from url_token import verify_token, decode_url_safe_token, create_url_safe_token
 from database import get_session
 from db import tables
@@ -23,10 +24,10 @@ ph = PasswordHasher()
 
 class AuthService:
 
-    def __init__(self, session: Session = Depends(get_session), token_service: TS=Depends()):
+    def __init__(self, session: Session = Depends(get_session), token_service: TS=Depends(), factor_service: Tfs = Depends()):
         self.session = session
         self.token_service = token_service
-
+        self.factor_service = factor_service
 
     async def register(
             self,
@@ -83,11 +84,12 @@ class AuthService:
     async def authenticate_user(
             self,
             user_email: str,
-            password: str
+            password: str,
+            code: str
     ) -> Token:
-
         user = await self.get_user_by_email(user_email)
         access_token_expires = timedelta(seconds=settings.jwt_expiration)
+
         if not user or not self.verify_passwords(password, user.password_hash):
             logger.warning({
                 "action": "login",
@@ -118,9 +120,12 @@ class AuthService:
                     'WWW-Authenticate': 'Bearer'
                 },
             )
-
-        password_valid = self.verify_passwords(password, user.password_hash)
-        if password_valid:
+        verify_code: bool
+        if not user.is_2fa:
+            verify_code = True
+        else:
+            verify_code = await self.factor_service.verify_2fa_code(user, code)
+        if verify_code:
             access_token = self.token_service.create_access_token(
                 data = {
                     "sub" : str(user.id),
@@ -135,6 +140,7 @@ class AuthService:
                 expires_delta=timedelta(days=settings.refresh_token_expire),
                 refresh = True,
             )
+
             logger.info({
                 "action": "login",
                 "status": "success",
@@ -142,16 +148,15 @@ class AuthService:
                 "message": "User logged in successfully"
             })
             return Token(access_token=access_token, refresh_token=refresh_token)
-
         logger.error({
             "action": "login",
             "status": "failed",
             "user_data": f"email: {user_email}",
-            "message": "Incorrect email or password"
+            "message": "Incorrect 2fa code"
         })
         raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Incorrect username or password",
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Incorrect 2fa code",
         )
 
 

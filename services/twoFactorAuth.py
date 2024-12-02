@@ -33,7 +33,7 @@ class TwoFactorAuthService:
                 "message": "Enable 2fa successfully"
             })
             return JSONResponse(
-                content={"message": "Qr created successfully"},
+                content={"message": "Enable 2fa successfully"},
                 status_code=status.HTTP_200_OK,
             )
         else:
@@ -49,46 +49,28 @@ class TwoFactorAuthService:
 
             )
 
-    async def verify_2fa_code(self, email: str, code: str):
-        stmt = select(User).where(User.email == email)
-        result = await self.session.execute(stmt)
-        user = result.scalars().first()
-
-        if not user:
-            logger.error({
-                "action": "verify 2fa",
-                "status": "failed",
-                "user_data": f"email: {user.email}",
-                "message": "User not found"
-            })
-            return JSONResponse(
-                content={"message": "User not found"},
-                status_code=status.HTTP_404_NOT_FOUND,
-            )
-
+    async def verify_2fa_code(self, user, code: str):
         totp = pyotp.TOTP(user.secret)
         if totp.verify(code):
-            logger.info({
-                "action": "verify 2fa",
-                "status": "success",
-                "user_data": f"email: {user.email}",
-                "message": "2FA verification succeeded"
-            })
-            return JSONResponse(
-                content={"message": "2FA verification succeeded"},
-                status_code=status.HTTP_200_OK,
-            )
-        else:
-            logger.error({
-                "action": "verify 2fa",
-                "status": "failed",
-                "user_data": f"email: {user.email}",
-                "message": "Invalid 2fa code"
-            })
-            return JSONResponse(
-                content={"message": "Invalid 2FA code"},
-                status_code=status.HTTP_400_BAD_REQUEST,
-            )
+            return True
+        return False
+
+    async def disable_2fa(self, user_data:UserTwoFa):
+        user_data.secret = None
+        user_data.is_2fa = False
+        self.session.add(user_data)
+        await self.session.commit()
+        logger.info({
+            "action": "enable 2fa",
+            "status": "success",
+            "user_data": f"email: {user_data.email}",
+            "message": "Disable 2fa successfully"
+        })
+        return JSONResponse(
+            content={"message": "Disable 2fa successfully"},
+            status_code=status.HTTP_200_OK,
+        )
+
 
 
 

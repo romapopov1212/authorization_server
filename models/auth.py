@@ -10,9 +10,11 @@ class OAuth2EmailPasswordRequestForm:
         self,
         email: str = Form(...),
         password: str = Form(...),
+        code: str = Form(...)
     ):
         self.email = email
         self.password = password
+        self.code = code
 
 class BaseUser(BaseModel):
     email: EmailStr
@@ -30,25 +32,11 @@ class UserRegistration(BaseUser):
     def password_complexity(cls, v):
         return PasswordValidator.validate_password(v)
 
-class User(BaseUser):
-    id: Optional[int] = None
-
-    class Config:
-        from_attributes = True
-
 class Token(BaseModel):
     access_token: str
     refresh_token: str
     type_token: str = 'bearer'
 
-class UserLogin(BaseModel):
-    email: EmailStr
-    password: str
-
-
-class SecuritySettings(BaseModel):
-    otp_configured: bool
-    secret: str
 
 class PasswordResetRequestModel(BaseModel):
     email: str
@@ -61,8 +49,6 @@ class PasswordResetConfirmModel(BaseModel):
     @field_validator("new_password")
     def password_complexity(cls, v):
         return PasswordValidator.validate_password(v)
-
-
 
 class UserTwoFa(BaseModel):
     email: str

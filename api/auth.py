@@ -28,7 +28,7 @@ async def sign_in(
         form_data: Annotated[OAuth2EmailPasswordRequestForm, Depends()],
         service: AuthService = Depends(),
 ) -> Token:
-    return await service.authenticate_user(form_data.email, form_data.password)
+    return await service.authenticate_user(form_data.email, form_data.password, form_data.code)
 
 
 @router.post('/password-reset-request')

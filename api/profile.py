@@ -4,7 +4,7 @@ from fastapi import Depends
 from models.profile import ProfileOut, ToChangeEmail, ToChangePassword, ToChangeUsername
 from services.profile import ProfileService
 from services.token import TokenService
-
+from services.twoFactorAuth import TwoFactorAuthService
 
 router = APIRouter(
     prefix='/profile'
@@ -53,4 +53,22 @@ async def change_phone_number(
     service : ProfileService = Depends()
 ):
     await service.change_phone_number(current_user, data)
+
+@router.post("/enable_twoFactorAuth")
+async def enable_2fa(
+        current_user: str = Depends(TokenService.get_current_user),
+        service: TwoFactorAuthService = Depends(),
+        profile_service: ProfileService = Depends()
+):
+    user_data = await profile_service.get_user_by_id(current_user)
+    return await service.enable_otp(user_data)
+
+@router.post("/disable_twoFactorAuth")
+async def disable_2fa(
+        current_user: str = Depends(TokenService.get_current_user),
+        service: TwoFactorAuthService = Depends(),
+        profile_service: ProfileService = Depends()
+):
+    user_data = await profile_service.get_user_by_id(current_user)
+    return await service.disable_2fa(user_data)
 
