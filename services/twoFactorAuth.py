@@ -21,7 +21,7 @@ class TwoFactorAuthService:
         if user_data.is_2fa is False:
             secret = pyotp.random_base32()
             user_data.secret = secret
-            uri = pyotp.totp.TOTP(secret).provisioning_uri(name=user_data.username, issuer_name="App")
+            uri = pyotp.totp.TOTP(secret).provisioning_uri(name=user_data.username, issuer_name="Gamma")
             qrcode.make(uri).save(f"{user_data.username}_qrcode.png")
             user_data.is_2fa = True
             self.session.add(user_data)
