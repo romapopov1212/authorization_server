@@ -23,3 +23,4 @@ fastapi-mail
 qrcode
 pytest
 httpx
+pytest_asyncio
