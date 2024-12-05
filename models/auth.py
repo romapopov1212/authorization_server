@@ -1,6 +1,6 @@
 from __future__ import annotations
 import re
-from typing import Optional
+
 from fastapi import Form
 from pydantic import EmailStr, BaseModel, field_validator
 

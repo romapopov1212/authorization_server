@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   app:
     build:
@@ -28,10 +30,25 @@ services:
     networks:
       - app-network
 
+  test_database:
+    image: postgres:latest
+    container_name: test_database
+    volumes:
+      - db_test:/var/lib/postgresql/data
+    ports:
+      - 5435:5432
+    environment:
+      - POSTGRES_PASSWORD=1234
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=Users
+    restart: always
+    networks:
+      - app-network
+
 volumes:
   db:
+  db_test:
 
 networks:
   app-network:
     driver: bridge
-

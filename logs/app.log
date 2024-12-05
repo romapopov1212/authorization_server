@@ -147,3 +147,6 @@
 2024-11-30 12:26:25.773 | INFO     | services.twoFactorAuth:verify_2fa_code:71 - {'action': 'verify 2fa', 'status': 'success', 'user_data': 'email: popovroma054@gmail.com', 'message': '2FA verification succeeded'}
 2024-11-30 12:26:36.168 | INFO     | services.token:get_current_user:80 - {'action': 'get_current_user', 'status': 'success', 'user_id': '1', 'message': 'User authenticated'}
 2024-11-30 12:26:36.173 | ERROR    | services.twoFactorAuth:verify_2fa_code:82 - {'action': 'verify 2fa', 'status': 'failed', 'user_data': 'email: popovroma054@gmail.com', 'message': 'Invalid 2fa code'}
+2024-12-05 14:28:30.029 | INFO     | services.auth:register:72 - {'action': 'register', 'status': 'success', 'user_data': 'email: tutikosnov@gmail.com', 'message': 'User registered successfully'}
+2024-12-05 14:32:52.985 | ERROR    | services.auth:register:49 - {'action': 'register', 'status': 'failed', 'user_data': 'email: tutikosnov@gmail.com', 'message': 'User with this email already exists'}
+2024-12-05 14:41:56.894 | INFO     | services.auth:register:72 - {'action': 'register', 'status': 'success', 'user_data': 'email: tutikosnov@gmail.com', 'message': 'User registered successfully'}
