@@ -13,4 +13,4 @@ class User(Base):
     is_active = Column(Boolean, default=False)
     role = Column(String, default="user")
     is_2fa = Column(Boolean, default=False)
-    secret = Column(String)
+    secret = Column(Text)

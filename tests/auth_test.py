@@ -71,5 +71,8 @@ async def test_register(setup_database):
         assert db_user.email == user_data.email
         assert db_user.username == user_data.username
         assert db_user.phone_number == user_data.phone_number
+        assert db_user.password != user_data.password
         assert db_user.is_active is False
         assert db_user.role == "user"
+        assert db_user.is_2fa is False
+        assert db_user.secret is None
