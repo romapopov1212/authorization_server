@@ -150,3 +150,13 @@
 2024-12-05 14:28:30.029 | INFO     | services.auth:register:72 - {'action': 'register', 'status': 'success', 'user_data': 'email: tutikosnov@gmail.com', 'message': 'User registered successfully'}
 2024-12-05 14:32:52.985 | ERROR    | services.auth:register:49 - {'action': 'register', 'status': 'failed', 'user_data': 'email: tutikosnov@gmail.com', 'message': 'User with this email already exists'}
 2024-12-05 14:41:56.894 | INFO     | services.auth:register:72 - {'action': 'register', 'status': 'success', 'user_data': 'email: tutikosnov@gmail.com', 'message': 'User registered successfully'}
+2024-12-06 23:30:46.842 | INFO     | services.auth:register:72 - {'action': 'register', 'status': 'success', 'user_data': 'email: tutikosnov@gmail.com', 'message': 'User registered successfully'}
+2024-12-07 00:56:38.386 | INFO     | services.auth:register:72 - {'action': 'register', 'status': 'success', 'user_data': 'email: tutikosnov@gmail.com', 'message': 'User registered successfully'}
+2024-12-07 01:36:07.042 | INFO     | services.auth:register:72 - {'action': 'register', 'status': 'success', 'user_data': 'email: tutikosnov@gmail.com', 'message': 'User registered successfully'}
+2024-12-07 01:40:53.537 | INFO     | services.auth:register:72 - {'action': 'register', 'status': 'success', 'user_data': 'email: tutikosnov@gmail.com', 'message': 'User registered successfully'}
+2024-12-07 01:41:26.522 | INFO     | services.auth:register:72 - {'action': 'register', 'status': 'success', 'user_data': 'email: tutikosnov@gmail.com', 'message': 'User registered successfully'}
+2024-12-07 01:42:42.901 | INFO     | services.auth:register:72 - {'action': 'register', 'status': 'success', 'user_data': 'email: test@test.com', 'message': 'User registered successfully'}
+2024-12-07 01:43:36.257 | INFO     | services.auth:register:72 - {'action': 'register', 'status': 'success', 'user_data': 'email: test@test.com', 'message': 'User registered successfully'}
+2024-12-07 01:45:16.662 | INFO     | services.auth:register:72 - {'action': 'register', 'status': 'success', 'user_data': 'email: test@test.com', 'message': 'User registered successfully'}
+2024-12-07 01:45:34.213 | INFO     | services.auth:register:72 - {'action': 'register', 'status': 'success', 'user_data': 'email: test@test.com', 'message': 'User registered successfully'}
+2024-12-07 01:46:11.294 | INFO     | services.auth:register:72 - {'action': 'register', 'status': 'success', 'user_data': 'email: test@test.com', 'message': 'User registered successfully'}
