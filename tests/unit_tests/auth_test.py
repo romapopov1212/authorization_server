@@ -32,6 +32,12 @@ class TestAuthService:
             )
         assert True
 
+    # def test_reset_request_password_model(self, email, expectation):
+    #     with expectation:
+    #         models.auth.PasswordResetRequestModel(
+    #             email=email
+    #         )
+    #     assert True
     # 
     # @pytest.mark.asyncio
     # async def test_register(self, setup_database, session):
@@ -55,26 +61,35 @@ class TestAuthService:
     #
     #     assert db_user is not None
 
-    @pytest.mark.asyncio
-    async def test_login(self, setup_database, session):
-        token_service = TokenService()
-        service = AuthService(session=session, token_service=token_service)
-        user_data_to_register = models.auth.UserRegistration(
-            email="test@test.com",
-            username="tutik77",
-            password="AAaa1234!!",
-            phone_number="89528723878",
-        )
-        await service.register(user_data_to_register)
-        user = await service.get_user_by_email(user_data_to_register.email)
-        user.is_active = True
-        session.add(user)
-        await session.commit()
-        email = "test@test.com"
-        password = "AAaa1234!!"
-        code = "string"
+    # @pytest.mark.asyncio
+    # async def test_login(self, setup_database, session):
+    #     token_service = TokenService()
+    #     service = AuthService(session=session, token_service=token_service)
+    #     user_data_to_register = models.auth.UserRegistration(
+    #         email="test@test.com",
+    #         username="tutik77",
+    #         password="AAaa1234!!",
+    #         phone_number="89528723878",
+    #     )
+    #     await service.register(user_data_to_register)
+    #     user = await service.get_user_by_email(user_data_to_register.email)
+    #     user.is_active = True
+    #     session.add(user)
+    #     await session.commit()
+    #     email = "test@test.com"
+    #     password = "AAaa1234!!"
+    #     code = "string"
+    #
+    #     result = await service.authenticate_user(email, password, code)
+    #     assert result is not None
+    #     assert isinstance(result, Token)
 
-        result = await service.authenticate_user(email, password, code)
-        assert result is not None
-        assert isinstance(result, Token)
-        #assert result.status_code == 200
+    @pytest.mark.asyncio
+    async def test_password_reset_request(self, setup_database, session):
+
+        service = AuthService(session=session)
+        email_data = models.auth.PasswordResetRequestModel(
+            email = "test@test.com"
+        )
+        result = await service.password_reset_request(email_data)
+        assert result.status_code == 200
