@@ -8,10 +8,6 @@ from models.auth import Token
 from services.auth import AuthService
 from db_setup import User
 
-class MockTokenService:
-    def create_access_token(self, data):
-        return "mock_access_token"
-
 class TestAuthService:
 
     @pytest.mark.parametrize(
@@ -32,6 +28,13 @@ class TestAuthService:
             )
         assert True
 
+    #это пока не работает
+    # @pytest.mark.parametrize(
+    #     "email, expectation",
+    #     [
+    #         ("test@test.com", does_not_raise()),
+    #         ("plohoyemail",  pytest.raises(ValueError)),
+    #     ])
     # def test_reset_request_password_model(self, email, expectation):
     #     with expectation:
     #         models.auth.PasswordResetRequestModel(
@@ -93,3 +96,17 @@ class TestAuthService:
         )
         result = await service.password_reset_request(email_data)
         assert result.status_code == 200
+
+    #пока не сделал
+    # @pytest.mark.asyncio
+    # async def test_password_reset(self, setup_database, session):
+    #     service = AuthService(session=session)
+    #     password_data = models.auth.PasswordResetConfirmModel(
+    #         new_password="AAaa1234!!!",
+    #         confirm_new_password="AAaa1234!!!",
+    #     )
+
+    #async def test_email_confirm(self, setup_database, session):
+    #    service = AuthService(session=session)
+
+

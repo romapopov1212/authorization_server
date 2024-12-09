@@ -39,7 +39,7 @@ async def password_reset_request(
     return await service.password_reset_request(email_data)
 
 
-@router.post('/reset-password')
+@router.post('/reset-password/{token}')
 async def reset_password(
         token,
         password: PasswordResetConfirmModel,
