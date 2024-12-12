@@ -1,6 +1,7 @@
 from fastapi import APIRouter
 from fastapi import Depends
 
+from models.profile import ToChangePhoneNumber
 from models.profile import ProfileOut, ToChangeEmail, ToChangePassword, ToChangeUsername
 from services.profile import ProfileService
 from services.token import TokenService
@@ -48,11 +49,11 @@ async def change_username(
 
 @router.patch('/change-phone-number')
 async def change_phone_number(
-    data,
+    number: ToChangePhoneNumber,
     current_user: str = Depends(TokenService.get_current_user),
     service : ProfileService = Depends()
 ):
-    await service.change_phone_number(current_user, data)
+    await service.change_phone_number(current_user, number)
 
 @router.post("/enable_twoFactorAuth")
 async def enable_2fa(

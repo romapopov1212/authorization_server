@@ -5,6 +5,7 @@ from fastapi import HTTPException, status
 from fastapi.responses import JSONResponse
 from sqlalchemy.future import select
 
+from models.profile import ToChangePhoneNumber
 from mail import send_email_to_confirm
 from services.auth import ph
 
@@ -123,14 +124,14 @@ class ProfileService:
         )
 
 
-    async def change_phone_number(self, user_id, data):
-        existing_user = await self.get_user_by_phone_number(data.new_phone_number)
+    async def change_phone_number(self, user_id, number:ToChangePhoneNumber):
+        existing_user = await self.get_user_by_phone_number(number.new_phone_number)
         if existing_user:
             logger.error({
                 "action": "change_phone_number",
                 "status": "failed",
                 "user_data": f"user_id: {user_id}",
-                "message": f"User with phone number {data.new_phone_number} already exists"
+                "message": f"User with phone number {number.new_phone_number} already exists"
             })
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
@@ -140,12 +141,12 @@ class ProfileService:
                 })
 
         user = await self.get_user_by_id(user_id)
-        user.phone_number = data.new_phone_number
+        user.phone_number = number.new_phone_number
         await self.session.commit()
         logger.info({
             "action": "change_phone_number",
             "status": "success",
-            "user_data": f"user_email: {user.email}, user_new_phone_number: {data.new_phone_number}",
+            "user_data": f"user_email: {user.email}, user_new_phone_number: {number.new_phone_number}",
             "message": "Phone number changed successfully"
         })
         return

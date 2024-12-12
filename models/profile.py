@@ -11,7 +11,7 @@ class ToChangeEmail(ToChangeData):
 class ToChangeUsername(BaseModel):
     new_username: str
 
-class ToChangePhoneNumber(ToChangeData):
+class ToChangePhoneNumber(BaseModel):
     new_phone_number: str
 
     @field_validator("new_phone_number")
