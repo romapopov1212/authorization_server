@@ -420,3 +420,27 @@
 2024-12-12 21:43:13.602 | INFO     | services.auth:verify_user_account:282 - {'action': 'verify_user_account', 'status': 'success', 'user_data': 'email: popovrromma@gmail.com', 'message': 'Account verified successfully'}
 2024-12-12 21:43:26.603 | INFO     | services.auth:authenticate_user:144 - {'action': 'login', 'status': 'success', 'user_data': 'email: popovrromma@gmail.com', 'message': 'User logged in successfully'}
 2024-12-12 21:43:39.069 | INFO     | services.auth:authenticate_user:144 - {'action': 'login', 'status': 'success', 'user_data': 'email: popovrromma@gmail.com', 'message': 'User logged in successfully'}
+2024-12-13 01:10:10.104 | WARNING  | services.auth:authenticate_user:94 - {'action': 'login', 'status': 'failed', 'user_data': 'email: string', 'message': 'Incorrect email or password'}
+2024-12-27 11:08:14.782 | INFO     | services.auth:password_reset_request:174 - {'action': 'password_reset_request', 'status': 'success', 'user_data': 'email: test@test.com', 'message': 'Reset password message sent successfully to test@test.com'}
+2024-12-27 11:08:59.998 | INFO     | services.auth:register:72 - {'action': 'register', 'status': 'success', 'user_data': 'email: test@test.com', 'message': 'User registered successfully'}
+2024-12-27 11:09:00.053 | INFO     | services.auth:authenticate_user:144 - {'action': 'login', 'status': 'success', 'user_data': 'email: test@test.com', 'message': 'User logged in successfully'}
+2024-12-27 11:12:40.906 | INFO     | services.auth:register:72 - {'action': 'register', 'status': 'success', 'user_data': 'email: test@test.com', 'message': 'User registered successfully'}
+2024-12-27 11:12:40.970 | INFO     | services.auth:authenticate_user:144 - {'action': 'login', 'status': 'success', 'user_data': 'email: test@test.com', 'message': 'User logged in successfully'}
+2024-12-27 11:13:21.570 | INFO     | services.auth:register:72 - {'action': 'register', 'status': 'success', 'user_data': 'email: test@test.com', 'message': 'User registered successfully'}
+2024-12-27 11:13:52.887 | INFO     | services.auth:register:72 - {'action': 'register', 'status': 'success', 'user_data': 'email: test@test.com', 'message': 'User registered successfully'}
+2024-12-27 11:14:06.701 | INFO     | services.auth:register:72 - {'action': 'register', 'status': 'success', 'user_data': 'email: test@test.com', 'message': 'User registered successfully'}
+2024-12-27 11:14:38.486 | INFO     | services.auth:register:72 - {'action': 'register', 'status': 'success', 'user_data': 'email: test@test.com', 'message': 'User registered successfully'}
+2024-12-27 11:14:59.437 | INFO     | services.auth:register:72 - {'action': 'register', 'status': 'success', 'user_data': 'email: test@test.com', 'message': 'User registered successfully'}
+2024-12-27 11:50:37.971 | INFO     | services.auth:register:72 - {'action': 'register', 'status': 'success', 'user_data': 'email: test@test.com', 'message': 'User registered successfully'}
+2024-12-27 11:50:41.253 | INFO     | services.auth:password_reset_request:174 - {'action': 'password_reset_request', 'status': 'success', 'user_data': 'email: test@test.com', 'message': 'Reset password message sent successfully to test@test.com'}
+2024-12-27 11:51:46.479 | INFO     | services.auth:register:72 - {'action': 'register', 'status': 'success', 'user_data': 'email: test@test.com', 'message': 'User registered successfully'}
+2024-12-27 11:52:14.433 | INFO     | services.auth:register:72 - {'action': 'register', 'status': 'success', 'user_data': 'email: test@test.com', 'message': 'User registered successfully'}
+2024-12-27 11:52:35.649 | INFO     | services.auth:register:72 - {'action': 'register', 'status': 'success', 'user_data': 'email: test@test.com', 'message': 'User registered successfully'}
+2024-12-27 12:03:29.499 | INFO     | services.auth:register:72 - {'action': 'register', 'status': 'success', 'user_data': 'email: test@test.com', 'message': 'User registered successfully'}
+2024-12-27 12:03:53.065 | INFO     | services.auth:register:72 - {'action': 'register', 'status': 'success', 'user_data': 'email: test@test.com', 'message': 'User registered successfully'}
+2024-12-27 12:07:54.210 | INFO     | services.auth:register:72 - {'action': 'register', 'status': 'success', 'user_data': 'email: test@test.com', 'message': 'User registered successfully'}
+2024-12-27 12:07:57.311 | INFO     | services.auth:password_reset_request:174 - {'action': 'password_reset_request', 'status': 'success', 'user_data': 'email: test@test.com', 'message': 'Reset password message sent successfully to test@test.com'}
+2024-12-27 12:10:26.592 | INFO     | services.auth:register:72 - {'action': 'register', 'status': 'success', 'user_data': 'email: test@test.com', 'message': 'User registered successfully'}
+2024-12-27 12:10:29.552 | INFO     | services.auth:register:72 - {'action': 'register', 'status': 'success', 'user_data': 'email: test@test.com', 'message': 'User registered successfully'}
+2024-12-27 12:10:29.612 | INFO     | services.auth:authenticate_user:144 - {'action': 'login', 'status': 'success', 'user_data': 'email: test@test.com', 'message': 'User logged in successfully'}
+2024-12-27 12:10:32.195 | INFO     | services.auth:password_reset_request:174 - {'action': 'password_reset_request', 'status': 'success', 'user_data': 'email: test@test.com', 'message': 'Reset password message sent successfully to test@test.com'}
